@@ -26,6 +26,11 @@ jobs:
             echo "### compiler errors"; grep -nE "error:|warning:|symbol:|location:|\^" build.log | head -200
             JAR=$(find ~/.gradle/caches .gradle -name 'minecraft-*.jar' 2>/dev/null | grep -vE 'sources|client-only' | head -1)
             echo "### minecraft jar: $JAR"
+            CJAR=$(find ~/.gradle/caches .gradle -name 'minecraft-*client*.jar' 2>/dev/null | grep -v sources | head -1)
+            echo "### client jar: $CJAR"
+            for c in net.minecraft.client.KeyMapping 'net.minecraft.client.KeyMapping$Category' com.mojang.blaze3d.platform.InputConstants; do
+              echo "=== $c"; javap -cp "$CJAR" "$c" 2>&1 | grep -iE 'class |record |Category|register|KeyMapping\(|Type |consumeClick' | head -30
+            done
             for c in net.minecraft.client.KeyMapping 'net.minecraft.client.KeyMapping$Category' \
                      net.minecraft.network.protocol.common.custom.CustomPacketPayload \
                      'net.minecraft.network.protocol.common.custom.CustomPacketPayload$Type' \
@@ -33,7 +38,7 @@ jobs:
                      net.minecraft.commands.Commands net.minecraft.commands.CommandSourceStack net.minecraft.server.level.ServerPlayer; do
               echo "=== $c"; javap -cp "$JAR" "$c" 2>&1 | grep -iE 'class |interface |record |Category|register|unit|createCommandSourceStack|performPrefixedCommand|withSuppressedOutput|KeyMapping\(|Type\(|getStringUUID' | head -40
             done
-            for j in $(find ~/.gradle/caches -name 'fabric-networking-api-v1*.jar' -o -name 'fabric-key-binding-api-v1*.jar' -o -name 'fabric-lifecycle-events-v1*.jar' 2>/dev/null | grep -v sources | sort -u | head -8); do
+            for j in $(find ~/.gradle/caches -name 'fabric-networking-api-v1*.jar' -o -name 'fabric-key-binding-api-v1*.jar' -o -name 'fabric-lifecycle-events-v1*.jar' 2>/dev/null | grep -v sources | sort -u | head -12); do
               echo "=== jar $j"
               for cls in $(unzip -Z1 "$j" | grep -E 'api/.*\.class$' | grep -vE '\$[0-9]' | sed 's/\.class$//; s#/#.#g' | grep -iE 'PayloadTypeRegistry|PlayNetworking|KeyBinding|KeyMapping|ClientTickEvents|ServerTickEvents'); do
                 echo "--- $cls"; javap -cp "$j" "$cls" 2>&1 | head -40
