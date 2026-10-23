@@ -1,0 +1,31 @@
+name: build
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: gradle/actions/wrapper-validation@v6
+      - uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+      - run: chmod +x ./gradlew
+      - name: build
+        run: ./gradlew build --stacktrace
+      - name: API-Signaturen ausgeben (nur bei Fehlern, hilft beim Korrigieren)
+        if: failure()
+        run: |
+          JAR=$(find ~/.gradle/caches .gradle -name 'minecraft-merged*.jar' -o -name 'minecraft-common*.jar' 2>/dev/null | head -1)
+          echo "minecraft jar: $JAR"
+          for c in net.minecraft.client.KeyMapping 'net.minecraft.client.KeyMapping$Category' net.minecraft.network.protocol.common.custom.CustomPacketPayload net.minecraft.network.codec.StreamCodec net.minecraft.server.MinecraftServer net.minecraft.commands.Commands; do
+            echo "=== $c"; javap -cp "$JAR" "$c" 2>&1 | grep -iE 'class |Category|register|unit|createCommandSourceStack|performPrefixedCommand|KeyMapping\(|Type\(' | head -40
+          done
+          for j in $(find ~/.gradle/caches -name 'fabric-networking-api-v1*.jar' -o -name 'fabric-key-binding-api-v1*.jar' -o -name 'fabric-lifecycle-events-v1*.jar' 2>/dev/null | grep -v sources | head -6); do
+            echo "=== $j"; unzip -l "$j" | grep -E '\.class' | grep -iE 'Payload|KeyBinding|ClientTickEvents|PlayNetworking' | head -20
+          done
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Mythic-Legenden-Mod
+          path: build/libs/

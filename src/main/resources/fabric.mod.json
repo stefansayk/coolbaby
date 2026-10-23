@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "mythic",
+  "version": "${version}",
+  "name": "Mythic Legenden",
+  "description": "Sechs einzigartige legendäre Waffen mit Fähigkeiten (Taste X), jede nur einmal pro Welt craftbar. Dazu 3D-Mythic-Texturen für alle Waffen.",
+  "authors": [
+    "Mythic Legenden"
+  ],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/mythic/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "de.mythic.legenden.MythicLegenden"
+    ],
+    "client": [
+      "de.mythic.legenden.client.MythicLegendenClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

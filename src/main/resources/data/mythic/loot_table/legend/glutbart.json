@@ -1,0 +1,175 @@
+{
+  "type": "minecraft:command",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_axe",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:custom_name": {
+                  "text": "Glutbart",
+                  "color": "#ff8a00",
+                  "bold": true,
+                  "italic": false
+                },
+                "minecraft:item_model": "mythic:glutbart",
+                "minecraft:rarity": "epic",
+                "minecraft:lore": [
+                  {
+                    "text": "Axt des Vulkankönigs",
+                    "color": "gray",
+                    "italic": true
+                  },
+                  "",
+                  [
+                    {
+                      "text": "◆ Passiv · ",
+                      "color": "#ff8a00",
+                      "italic": false,
+                      "bold": true
+                    },
+                    {
+                      "text": "Vulkanherz",
+                      "color": "white",
+                      "bold": true,
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "  Treffer setzen Gegner in Brand, +3 Schaden",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  {
+                    "text": "  gegen Brennende, Feuerresistenz in der Hand.",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  [
+                    {
+                      "text": "▶ [",
+                      "color": "#ff8a00",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "keybind": "key.mythic.ability",
+                      "color": "#ff8a00",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "] · ",
+                      "color": "#ff8a00",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "Erdbeben",
+                      "color": "white",
+                      "bold": true,
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "  Bodenschlag: 6 Schaden im Umkreis von 5",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  {
+                    "text": "  Blöcken, Gegner fliegen hoch und werden",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  {
+                    "text": "  langsam. (12 s)",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  [
+                    {
+                      "text": "▶ [",
+                      "color": "#ff8a00",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "Schleichen + ",
+                      "color": "#ff8a00",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "keybind": "key.mythic.ability",
+                      "color": "#ff8a00",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "] · ",
+                      "color": "#ff8a00",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "Flammenatem",
+                      "color": "white",
+                      "bold": true,
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "  Feuerstoß nach vorn: 5 Schaden, Gegner",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  {
+                    "text": "  brennen. (7 s)",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  "",
+                  [
+                    {
+                      "text": "Taste ",
+                      "color": "dark_gray",
+                      "italic": false
+                    },
+                    {
+                      "keybind": "key.mythic.ability",
+                      "color": "dark_gray",
+                      "italic": false
+                    },
+                    {
+                      "text": " = Legenden-Fähigkeit (in der Steuerung änderbar)",
+                      "color": "dark_gray",
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "✦ Einzigartig: Es gibt nur eine in dieser Welt",
+                    "color": "gold",
+                    "italic": false
+                  }
+                ],
+                "minecraft:enchantments": {
+                  "mythic:glutbart": 1
+                },
+                "minecraft:enchantment_glint_override": true,
+                "minecraft:unbreakable": {},
+                "minecraft:custom_data": {
+                  "mythic": "glutbart"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

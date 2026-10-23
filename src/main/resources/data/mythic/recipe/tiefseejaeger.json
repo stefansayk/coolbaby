@@ -1,0 +1,167 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "mythic_legend",
+  "pattern": [
+    "NHN",
+    "BXB",
+    "NDN"
+  ],
+  "key": {
+    "H": "minecraft:heart_of_the_sea",
+    "B": "minecraft:blue_ice",
+    "X": "minecraft:crossbow",
+    "N": "minecraft:nautilus_shell",
+    "D": "minecraft:diamond_block"
+  },
+  "result": {
+    "id": "minecraft:crossbow",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {
+        "text": "Tiefseejäger",
+        "color": "#3a8cff",
+        "bold": true,
+        "italic": false
+      },
+      "minecraft:item_model": "mythic:tiefseejaeger",
+      "minecraft:rarity": "epic",
+      "minecraft:lore": [
+        {
+          "text": "Armbrust der Eistiefe",
+          "color": "gray",
+          "italic": true
+        },
+        "",
+        [
+          {
+            "text": "◆ Passiv · ",
+            "color": "#3a8cff",
+            "italic": false,
+            "bold": true
+          },
+          {
+            "text": "Eistiefe",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Lädt doppelt so schnell, Bolzen durchschlagen",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  4 Gegner und lassen sie fast erstarren.",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#3a8cff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#3a8cff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#3a8cff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Frostnova",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Eiswelle: 4 Schaden im Umkreis von 6 Blöcken,",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  Gegner erstarren 4 s. (14 s)",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#3a8cff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Schleichen + ",
+            "color": "#3a8cff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#3a8cff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#3a8cff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Eisschild",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  5 s Resistenz II und 4 Extraherzen. (18 s)",
+          "color": "gray",
+          "italic": false
+        },
+        "",
+        [
+          {
+            "text": "Taste ",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "text": " = Legenden-Fähigkeit (in der Steuerung änderbar)",
+            "color": "dark_gray",
+            "italic": false
+          }
+        ],
+        {
+          "text": "✦ Einzigartig: Es gibt nur eine in dieser Welt",
+          "color": "gold",
+          "italic": false
+        }
+      ],
+      "minecraft:enchantments": {
+        "mythic:tiefseejaeger": 1
+      },
+      "minecraft:enchantment_glint_override": true,
+      "minecraft:unbreakable": {},
+      "minecraft:custom_data": {
+        "mythic_seal": "tiefseejaeger"
+      }
+    }
+  }
+}

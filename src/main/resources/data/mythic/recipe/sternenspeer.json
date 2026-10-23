@@ -1,0 +1,172 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "mythic_legend",
+  "pattern": [
+    "ADA",
+    "CXC",
+    "AIA"
+  ],
+  "key": {
+    "D": "minecraft:dragon_head",
+    "C": "minecraft:end_crystal",
+    "X": "minecraft:netherite_spear",
+    "A": "minecraft:amethyst_shard",
+    "I": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "id": "minecraft:netherite_spear",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {
+        "text": "Sternenspeer",
+        "color": "#c89aff",
+        "bold": true,
+        "italic": false
+      },
+      "minecraft:item_model": "mythic:sternenspeer",
+      "minecraft:rarity": "epic",
+      "minecraft:lore": [
+        {
+          "text": "Lanze der gefallenen Sterne",
+          "color": "gray",
+          "italic": true
+        },
+        "",
+        [
+          {
+            "text": "◆ Passiv · ",
+            "color": "#c89aff",
+            "italic": false,
+            "bold": true
+          },
+          {
+            "text": "Sternenkörper",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Treffer schleudern Gegner hoch und lassen sie",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  leuchten. Kein Fallschaden.",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#c89aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#c89aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#c89aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Sternenregen",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Sterne stürzen auf dein Ziel (bis 32 Blöcke):",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  8 Schaden im Umkreis von 3,5 Blöcken. (14 s)",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#c89aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Schleichen + ",
+            "color": "#c89aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#c89aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#c89aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Sternensprung",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Katapultiert dich 10 Blöcke hoch, danach",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  gleitest du sanft herab. (8 s)",
+          "color": "gray",
+          "italic": false
+        },
+        "",
+        [
+          {
+            "text": "Taste ",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "text": " = Legenden-Fähigkeit (in der Steuerung änderbar)",
+            "color": "dark_gray",
+            "italic": false
+          }
+        ],
+        {
+          "text": "✦ Einzigartig: Es gibt nur eine in dieser Welt",
+          "color": "gold",
+          "italic": false
+        }
+      ],
+      "minecraft:enchantments": {
+        "mythic:sternenspeer": 1
+      },
+      "minecraft:enchantment_glint_override": true,
+      "minecraft:unbreakable": {},
+      "minecraft:custom_data": {
+        "mythic_seal": "sternenspeer"
+      }
+    }
+  }
+}

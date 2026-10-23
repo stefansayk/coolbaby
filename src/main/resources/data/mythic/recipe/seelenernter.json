@@ -1,0 +1,177 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "mythic_legend",
+  "pattern": [
+    "ONO",
+    "WXW",
+    "OIO"
+  ],
+  "key": {
+    "N": "minecraft:nether_star",
+    "W": "minecraft:wither_skeleton_skull",
+    "X": "minecraft:netherite_sword",
+    "O": "minecraft:crying_obsidian",
+    "I": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "id": "minecraft:netherite_sword",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {
+        "text": "Seelenernter",
+        "color": "#ff2a5a",
+        "bold": true,
+        "italic": false
+      },
+      "minecraft:item_model": "mythic:seelenernter",
+      "minecraft:rarity": "epic",
+      "minecraft:lore": [
+        {
+          "text": "Klinge des Blutmondes",
+          "color": "gray",
+          "italic": true
+        },
+        "",
+        [
+          {
+            "text": "◆ Passiv · ",
+            "color": "#ff2a5a",
+            "italic": false,
+            "bold": true
+          },
+          {
+            "text": "Blutdurst",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Treffer heilen dich (Regeneration II) und",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  lassen Gegner verdorren.",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#ff2a5a",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#ff2a5a",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#ff2a5a",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Seelenernte",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Rote Seelenwelle: 6 Schaden an allen Gegnern",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  im Umkreis von 6 Blöcken, sie verdorren, du",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  regenerierst. (15 s)",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#ff2a5a",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Schleichen + ",
+            "color": "#ff2a5a",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#ff2a5a",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#ff2a5a",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Schattenschritt",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Teleportiert dich bis zu 8 Blöcke nach vorn",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  und gibt dir 4 s Stärke. (8 s)",
+          "color": "gray",
+          "italic": false
+        },
+        "",
+        [
+          {
+            "text": "Taste ",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "text": " = Legenden-Fähigkeit (in der Steuerung änderbar)",
+            "color": "dark_gray",
+            "italic": false
+          }
+        ],
+        {
+          "text": "✦ Einzigartig: Es gibt nur eine in dieser Welt",
+          "color": "gold",
+          "italic": false
+        }
+      ],
+      "minecraft:enchantments": {
+        "mythic:seelenernter": 1
+      },
+      "minecraft:enchantment_glint_override": true,
+      "minecraft:unbreakable": {},
+      "minecraft:custom_data": {
+        "mythic_seal": "seelenernter"
+      }
+    }
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "mythic_legend",
+  "pattern": [
+    "GCG",
+    "SXS",
+    "GIG"
+  ],
+  "key": {
+    "C": "minecraft:conduit",
+    "S": "minecraft:wet_sponge",
+    "X": "minecraft:trident",
+    "G": "minecraft:gold_block",
+    "I": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "id": "minecraft:trident",
+    "count": 1,
+    "components": {
+      "minecraft:custom_name": {
+        "text": "Abyss-Dreizack",
+        "color": "#8a6aff",
+        "bold": true,
+        "italic": false
+      },
+      "minecraft:item_model": "mythic:abyssdreizack",
+      "minecraft:rarity": "epic",
+      "minecraft:lore": [
+        {
+          "text": "Zepter des Abgrunds",
+          "color": "gray",
+          "italic": true
+        },
+        "",
+        [
+          {
+            "text": "◆ Passiv · ",
+            "color": "#8a6aff",
+            "italic": false,
+            "bold": true
+          },
+          {
+            "text": "Sturmherz",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Wurftreffer rufen einen Blitz, kehrt sofort",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  zurück, unter Wasser mehr Luft und schneller.",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#8a6aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#8a6aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#8a6aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Gewittersturm",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Drei Blitze schlagen um dein Ziel ein (bis 32",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  Blöcke). (20 s)",
+          "color": "gray",
+          "italic": false
+        },
+        [
+          {
+            "text": "▶ [",
+            "color": "#8a6aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Schleichen + ",
+            "color": "#8a6aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "#8a6aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "] · ",
+            "color": "#8a6aff",
+            "bold": true,
+            "italic": false
+          },
+          {
+            "text": "Sog des Abgrunds",
+            "color": "white",
+            "bold": true,
+            "italic": false
+          }
+        ],
+        {
+          "text": "  Zieht Gegner im Umkreis von 8 Blöcken zu dir",
+          "color": "gray",
+          "italic": false
+        },
+        {
+          "text": "  und hüllt sie in Dunkelheit. (14 s)",
+          "color": "gray",
+          "italic": false
+        },
+        "",
+        [
+          {
+            "text": "Taste ",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "keybind": "key.mythic.ability",
+            "color": "dark_gray",
+            "italic": false
+          },
+          {
+            "text": " = Legenden-Fähigkeit (in der Steuerung änderbar)",
+            "color": "dark_gray",
+            "italic": false
+          }
+        ],
+        {
+          "text": "✦ Einzigartig: Es gibt nur eine in dieser Welt",
+          "color": "gold",
+          "italic": false
+        }
+      ],
+      "minecraft:enchantments": {
+        "mythic:abyssdreizack": 1
+      },
+      "minecraft:enchantment_glint_override": true,
+      "minecraft:unbreakable": {},
+      "minecraft:custom_data": {
+        "mythic_seal": "abyssdreizack"
+      }
+    }
+  }
+}

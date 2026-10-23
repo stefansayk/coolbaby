@@ -1,0 +1,165 @@
+{
+  "type": "minecraft:command",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bow",
+          "functions": [
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:custom_name": {
+                  "text": "Geisterbogen",
+                  "color": "#b8ff3a",
+                  "bold": true,
+                  "italic": false
+                },
+                "minecraft:item_model": "mythic:geisterbogen",
+                "minecraft:rarity": "epic",
+                "minecraft:lore": [
+                  {
+                    "text": "Bogen der verlorenen Seelen",
+                    "color": "gray",
+                    "italic": true
+                  },
+                  "",
+                  [
+                    {
+                      "text": "◆ Passiv · ",
+                      "color": "#b8ff3a",
+                      "italic": false,
+                      "bold": true
+                    },
+                    {
+                      "text": "Geistersalve",
+                      "color": "white",
+                      "bold": true,
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "  3 Pfeile pro Schuss, verbraucht keine Pfeile,",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  {
+                    "text": "  Getroffene leuchten und werden langsam.",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  [
+                    {
+                      "text": "▶ [",
+                      "color": "#b8ff3a",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "keybind": "key.mythic.ability",
+                      "color": "#b8ff3a",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "] · ",
+                      "color": "#b8ff3a",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "Geisterregen",
+                      "color": "white",
+                      "bold": true,
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "  Ein Pfeilhagel stürzt auf dein Ziel (bis 32",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  {
+                    "text": "  Blöcke). (16 s)",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  [
+                    {
+                      "text": "▶ [",
+                      "color": "#b8ff3a",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "Schleichen + ",
+                      "color": "#b8ff3a",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "keybind": "key.mythic.ability",
+                      "color": "#b8ff3a",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "] · ",
+                      "color": "#b8ff3a",
+                      "bold": true,
+                      "italic": false
+                    },
+                    {
+                      "text": "Geistergestalt",
+                      "color": "white",
+                      "bold": true,
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "  5 s unsichtbar und schneller. (20 s)",
+                    "color": "gray",
+                    "italic": false
+                  },
+                  "",
+                  [
+                    {
+                      "text": "Taste ",
+                      "color": "dark_gray",
+                      "italic": false
+                    },
+                    {
+                      "keybind": "key.mythic.ability",
+                      "color": "dark_gray",
+                      "italic": false
+                    },
+                    {
+                      "text": " = Legenden-Fähigkeit (in der Steuerung änderbar)",
+                      "color": "dark_gray",
+                      "italic": false
+                    }
+                  ],
+                  {
+                    "text": "✦ Einzigartig: Es gibt nur eine in dieser Welt",
+                    "color": "gold",
+                    "italic": false
+                  }
+                ],
+                "minecraft:enchantments": {
+                  "mythic:geisterbogen": 1
+                },
+                "minecraft:enchantment_glint_override": true,
+                "minecraft:unbreakable": {},
+                "minecraft:custom_data": {
+                  "mythic": "geisterbogen"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

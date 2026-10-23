@@ -1,0 +1,22 @@
+{
+ "model": {
+  "type": "minecraft:select",
+  "property": "minecraft:display_context",
+  "cases": [
+   {
+    "when": [
+     "gui"
+    ],
+    "model": {
+     "type": "minecraft:model",
+     "model": "minecraft:item/mythic/wooden_spear_icon"
+    }
+   }
+  ],
+  "fallback": {
+   "type": "minecraft:model",
+   "model": "minecraft:item/mythic/wooden_spear"
+  }
+ },
+ "swap_animation_scale": 1.95
+}

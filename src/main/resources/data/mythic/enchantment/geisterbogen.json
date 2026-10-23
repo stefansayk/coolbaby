@@ -1,0 +1,85 @@
+{
+  "description": {
+    "text": "✦ Geistersalve",
+    "color": "#b8ff3a"
+  },
+  "supported_items": "minecraft:bow",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:projectile_count": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": 2
+        }
+      }
+    ],
+    "minecraft:projectile_spread": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": 12
+        }
+      }
+    ],
+    "minecraft:ammo_use": [
+      {
+        "effect": {
+          "type": "minecraft:set",
+          "value": 0
+        }
+      }
+    ],
+    "minecraft:post_attack": [
+      {
+        "enchanted": "attacker",
+        "affected": "victim",
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "direct_attacker",
+          "predicate": {
+            "minecraft:entity_type": "#minecraft:arrows"
+          }
+        },
+        "effect": {
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:apply_mob_effect",
+              "to_apply": "minecraft:glowing",
+              "min_duration": 8,
+              "max_duration": 8,
+              "min_amplifier": 0,
+              "max_amplifier": 0
+            },
+            {
+              "type": "minecraft:apply_mob_effect",
+              "to_apply": "minecraft:slowness",
+              "min_duration": 3,
+              "max_duration": 3,
+              "min_amplifier": 1,
+              "max_amplifier": 1
+            },
+            {
+              "type": "minecraft:run_function",
+              "function": "mythic:fx/geisterbogen"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

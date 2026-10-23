@@ -1,0 +1,65 @@
+{
+  "description": {
+    "text": "✦ Vulkanherz",
+    "color": "#ff8a00"
+  },
+  "supported_items": "minecraft:netherite_axe",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "enchanted": "attacker",
+        "affected": "victim",
+        "requirements": {
+          "condition": "minecraft:damage_source_properties",
+          "predicate": {
+            "is_direct": true
+          }
+        },
+        "effect": {
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:ignite",
+              "duration": 6
+            },
+            {
+              "type": "minecraft:run_function",
+              "function": "mythic:fx/glutbart"
+            }
+          ]
+        }
+      }
+    ],
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": 3
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:flags": {
+              "is_on_fire": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

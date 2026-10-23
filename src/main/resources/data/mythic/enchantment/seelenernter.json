@@ -1,0 +1,70 @@
+{
+  "description": {
+    "text": "✦ Blutdurst",
+    "color": "#ff2a5a"
+  },
+  "supported_items": "minecraft:netherite_sword",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "enchanted": "attacker",
+        "affected": "attacker",
+        "effect": {
+          "type": "minecraft:apply_mob_effect",
+          "to_apply": "minecraft:regeneration",
+          "min_duration": 3,
+          "max_duration": 3,
+          "min_amplifier": 1,
+          "max_amplifier": 1
+        },
+        "requirements": {
+          "condition": "minecraft:damage_source_properties",
+          "predicate": {
+            "is_direct": true
+          }
+        }
+      },
+      {
+        "enchanted": "attacker",
+        "affected": "victim",
+        "requirements": {
+          "condition": "minecraft:damage_source_properties",
+          "predicate": {
+            "is_direct": true
+          }
+        },
+        "effect": {
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:apply_mob_effect",
+              "to_apply": "minecraft:wither",
+              "min_duration": 4,
+              "max_duration": 4,
+              "min_amplifier": 0,
+              "max_amplifier": 0
+            },
+            {
+              "type": "minecraft:run_function",
+              "function": "mythic:fx/seelenernter"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

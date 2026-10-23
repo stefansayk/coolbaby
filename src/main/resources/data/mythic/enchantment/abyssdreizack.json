@@ -1,0 +1,77 @@
+{
+  "description": {
+    "text": "✦ Sturmherz",
+    "color": "#8a6aff"
+  },
+  "supported_items": "minecraft:trident",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "enchanted": "attacker",
+        "affected": "victim",
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "direct_attacker",
+          "predicate": {
+            "minecraft:entity_type": "minecraft:trident"
+          }
+        },
+        "effect": {
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:summon_entity",
+              "entity": "minecraft:lightning_bolt"
+            },
+            {
+              "type": "minecraft:play_sound",
+              "sound": "minecraft:item.trident.thunder",
+              "volume": 5.0,
+              "pitch": 1.0
+            },
+            {
+              "type": "minecraft:run_function",
+              "function": "mythic:fx/abyssdreizack"
+            }
+          ]
+        }
+      }
+    ],
+    "minecraft:trident_return_acceleration": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": 3
+        }
+      }
+    ],
+    "minecraft:attributes": [
+      {
+        "id": "mythic:enchantment.abyssdreizack",
+        "attribute": "minecraft:oxygen_bonus",
+        "amount": 3.0,
+        "operation": "add_value"
+      },
+      {
+        "id": "mythic:enchantment.abyssdreizack_swim",
+        "attribute": "minecraft:water_movement_efficiency",
+        "amount": 0.66,
+        "operation": "add_value"
+      }
+    ]
+  }
+}

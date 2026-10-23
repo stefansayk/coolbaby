@@ -1,0 +1,65 @@
+{
+  "description": {
+    "text": "✦ Eistiefe",
+    "color": "#3a8cff"
+  },
+  "supported_items": "minecraft:crossbow",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 100,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:crossbow_charge_time": {
+      "type": "minecraft:add",
+      "value": -0.625
+    },
+    "minecraft:projectile_piercing": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": 4
+        }
+      }
+    ],
+    "minecraft:post_attack": [
+      {
+        "enchanted": "attacker",
+        "affected": "victim",
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "direct_attacker",
+          "predicate": {
+            "minecraft:entity_type": "#minecraft:arrows"
+          }
+        },
+        "effect": {
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:apply_mob_effect",
+              "to_apply": "minecraft:slowness",
+              "min_duration": 2.5,
+              "max_duration": 2.5,
+              "min_amplifier": 3,
+              "max_amplifier": 3
+            },
+            {
+              "type": "minecraft:run_function",
+              "function": "mythic:fx/tiefseejaeger"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

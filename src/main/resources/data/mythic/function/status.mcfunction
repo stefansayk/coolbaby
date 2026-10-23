@@ -1,0 +1,13 @@
+tellraw @s {"text":"✦ Mythic Legenden ✦","color":"gold","bold":true}
+execute if score #seelenernter mythic.forged matches 1.. run tellraw @s ["",{"text":" ✔ ","color":"dark_gray"},{"text": "Seelenernter", "color": "#ff2a5a"},{"text":": bereits geschmiedet","color":"gray"}]
+execute unless score #seelenernter mythic.forged matches 1.. run tellraw @s ["",{"text":" ✦ ","color":"gold"},{"text": "Seelenernter", "color": "#ff2a5a"},{"text":": noch frei, Rezept im Rezeptbuch","color":"green"}]
+execute if score #glutbart mythic.forged matches 1.. run tellraw @s ["",{"text":" ✔ ","color":"dark_gray"},{"text": "Glutbart", "color": "#ff8a00"},{"text":": bereits geschmiedet","color":"gray"}]
+execute unless score #glutbart mythic.forged matches 1.. run tellraw @s ["",{"text":" ✦ ","color":"gold"},{"text": "Glutbart", "color": "#ff8a00"},{"text":": noch frei, Rezept im Rezeptbuch","color":"green"}]
+execute if score #sternenspeer mythic.forged matches 1.. run tellraw @s ["",{"text":" ✔ ","color":"dark_gray"},{"text": "Sternenspeer", "color": "#c89aff"},{"text":": bereits geschmiedet","color":"gray"}]
+execute unless score #sternenspeer mythic.forged matches 1.. run tellraw @s ["",{"text":" ✦ ","color":"gold"},{"text": "Sternenspeer", "color": "#c89aff"},{"text":": noch frei, Rezept im Rezeptbuch","color":"green"}]
+execute if score #geisterbogen mythic.forged matches 1.. run tellraw @s ["",{"text":" ✔ ","color":"dark_gray"},{"text": "Geisterbogen", "color": "#b8ff3a"},{"text":": bereits geschmiedet","color":"gray"}]
+execute unless score #geisterbogen mythic.forged matches 1.. run tellraw @s ["",{"text":" ✦ ","color":"gold"},{"text": "Geisterbogen", "color": "#b8ff3a"},{"text":": noch frei, Rezept im Rezeptbuch","color":"green"}]
+execute if score #tiefseejaeger mythic.forged matches 1.. run tellraw @s ["",{"text":" ✔ ","color":"dark_gray"},{"text": "Tiefseejäger", "color": "#3a8cff"},{"text":": bereits geschmiedet","color":"gray"}]
+execute unless score #tiefseejaeger mythic.forged matches 1.. run tellraw @s ["",{"text":" ✦ ","color":"gold"},{"text": "Tiefseejäger", "color": "#3a8cff"},{"text":": noch frei, Rezept im Rezeptbuch","color":"green"}]
+execute if score #abyssdreizack mythic.forged matches 1.. run tellraw @s ["",{"text":" ✔ ","color":"dark_gray"},{"text": "Abyss-Dreizack", "color": "#8a6aff"},{"text":": bereits geschmiedet","color":"gray"}]
+execute unless score #abyssdreizack mythic.forged matches 1.. run tellraw @s ["",{"text":" ✦ ","color":"gold"},{"text": "Abyss-Dreizack", "color": "#8a6aff"},{"text":": noch frei, Rezept im Rezeptbuch","color":"green"}]
