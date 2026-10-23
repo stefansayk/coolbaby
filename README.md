@@ -1,7 +1,7 @@
 # Mythic Legenden (Fabric-Mod für Minecraft 26.2)
 
 Sechs einzigartige legendäre Waffen. Jede kann pro Welt nur **ein einziges Mal** geschmiedet werden.
-Dazu 3D-Mythic-Texturen für alle Schwerter, Äxte, Speere, Bögen, Armbrüste und Dreizacke.
+Nur die sechs Legenden sehen besonders aus, alle normalen Waffen bleiben wie im normalen Minecraft.
 
 ## Installation
 1. [Fabric Loader](https://fabricmc.net/use/) für Minecraft **26.2** installieren.
@@ -10,7 +10,7 @@ Dazu 3D-Mythic-Texturen für alle Schwerter, Äxte, Speere, Bögen, Armbrüste u
 4. Auf einem Server: Fabric + Fabric API + diese Mod auf dem Server **und** bei jedem Spieler.
 
 Kein extra Texture Pack und kein Datapack nötig, alles steckt in der Mod.
-Das alte Datapack und Texture Pack bitte entfernen, damit nichts doppelt läuft.
+Das alte Datapack bitte aus der Welt entfernen, damit nichts doppelt läuft.
 
 ## Steuerung
 - **X**: erste aktive Fähigkeit der Legende in der Hand

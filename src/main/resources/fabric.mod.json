@@ -3,7 +3,7 @@
   "id": "mythic",
   "version": "${version}",
   "name": "Mythic Legenden",
-  "description": "Sechs einzigartige legendäre Waffen mit Fähigkeiten (Taste X), jede nur einmal pro Welt craftbar. Dazu 3D-Mythic-Texturen für alle Waffen.",
+  "description": "Sechs einzigartige legendäre Waffen mit eigenen 3D-Modellen und Fähigkeiten (Taste X), jede nur einmal pro Welt craftbar. Normale Waffen bleiben unverändert.",
   "authors": [
     "Mythic Legenden"
   ],
