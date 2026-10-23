@@ -5,7 +5,7 @@ import de.mythic.legenden.AbilityPayload;
 import de.mythic.legenden.MythicLegenden;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
@@ -17,7 +17,7 @@ public class MythicLegendenClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		abilityKey = KeyBindingHelper.registerKeyBinding(
+		abilityKey = KeyMappingHelper.registerKeyMapping(
 				new KeyMapping("key.mythic.ability", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, CATEGORY));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (abilityKey.consumeClick()) {

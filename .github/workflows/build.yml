@@ -44,6 +44,11 @@ jobs:
                 echo "--- $cls"; javap -cp "$j" "$cls" 2>&1 | head -40
               done
             done
+            echo "### fabric modules"; find ~/.gradle/caches -name 'fabric-*.jar' 2>/dev/null | grep -v sources | xargs -n1 basename | sort -u
+            for j in $(find ~/.gradle/caches -name 'fabric-*key*.jar' 2>/dev/null | grep -v sources | sort -u); do
+              echo "=== keyjar $j"
+              for cls in $(unzip -Z1 "$j" | grep -E 'api/.*\.class$' | grep -vE '\$[0-9]' | sed 's/\.class$//; s#/#.#g'); do echo "--- $cls"; javap -cp "$j" "$cls" 2>&1 | head -20; done
+            done
           } > diag.txt 2>&1 || true
           mkdir -p /tmp/out && cp build.log diag.txt /tmp/out/
           git config user.name "ci-log"; git config user.email "ci-log@users.noreply.github.com"
