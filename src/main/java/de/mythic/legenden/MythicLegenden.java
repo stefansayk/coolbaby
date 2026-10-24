@@ -26,6 +26,7 @@ public class MythicLegenden implements ModInitializer {
 			MinecraftServer server = context.server();
 			server.execute(() -> castAbility(server, player));
 		});
+		PvpRules.register();
 		LOGGER.info("Mythic Legenden geladen");
 	}
 

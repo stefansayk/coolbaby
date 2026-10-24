@@ -44,6 +44,15 @@ jobs:
                 echo "--- $cls"; javap -cp "$j" "$cls" 2>&1 | head -40
               done
             done
+            for c in net.minecraft.world.level.Level net.minecraft.world.entity.LivingEntity net.minecraft.server.network.ServerGamePacketListenerImpl \
+                     net.minecraft.world.entity.boss.enderdragon.EndCrystal net.minecraft.world.damagesource.DamageTypes net.minecraft.world.damagesource.DamageSource net.minecraft.world.entity.Entity; do
+              echo "=== $c"; javap -cp "$JAR" "$c" 2>&1 | grep -iE 'class |getServer|isDeadOrDying|getPlayer\(|BAD_RESPAWN|getDirectEntity|getEntity\(|getScoreboardName|getStringUUID|isSpectator|isCreative|public boolean is\(' | head -20
+            done
+            for j in $(find ~/.gradle/caches -name 'fabric-entity-events-v1*.jar' -o -name 'fabric-networking-api-v1*.jar' 2>/dev/null | grep -v sources | sort -u); do
+              for cls in $(unzip -Z1 "$j" | grep -E 'api/.*\.class$' | grep -vE '\$[0-9]' | sed 's/\.class$//; s#/#.#g' | grep -iE 'Elytra|Glid|LivingEntityEvents|PlayConnectionEvents'); do
+                echo "--- $cls"; javap -cp "$j" "$cls" 2>&1 | head -30
+              done
+            done
             echo "### fabric modules"; find ~/.gradle/caches -name 'fabric-*.jar' 2>/dev/null | grep -v sources | xargs -n1 basename | sort -u
             for j in $(find ~/.gradle/caches -name 'fabric-*key*.jar' 2>/dev/null | grep -v sources | sort -u); do
               echo "=== keyjar $j"
