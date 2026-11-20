@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block-Adventskalender</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/* =========================================================================
+   FARBEN & GRUNDLAGEN
+   ========================================================================= */
+:root {
+  --nacht-1: #0b1026;
+  --nacht-2: #1b2550;
+  --nacht-3: #2c3d78;
+  --gold: #ffd84a;
+  --gold-dunkel: #b8860b;
+  --schnee: #f4f8ff;
+  --text: #eef2ff;
+  --text-leise: #aab4dd;
+  --gruen: #5bd35b;
+  --rot: #ff5a5a;
+  --panel: #1a1f3a;
+  --panel-rand: #0a0d1f;
+  --stein: #8b8b8b;
+  --pixel: "Press Start 2P", ui-monospace, monospace;
+  --lesen: "VT323", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--nacht-1) 0%, var(--nacht-2) 55%, var(--nacht-3) 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--lesen);
+  font-size: 22px;
+  overflow-x: hidden;
+  display: flex; flex-direction: column;
+}
+.seite { flex: 1 0 auto; width: 100%; }
+#schnee { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+.seite {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto;
+  padding: 32px 16px 0;
+}
+
+/* =========================================================================
+   KOPF
+   ========================================================================= */
+header { text-align: center; margin-bottom: 28px; }
+.mond {
+  position: absolute; top: 28px; right: 6%;
+  width: 56px; height: 56px; background: #fff7d1;
+  box-shadow: 0 0 40px 10px rgba(255, 247, 209, .25);
+  image-rendering: pixelated;
+}
+.mond::after {
+  content: ""; position: absolute; width: 14px; height: 14px; background: #e8dfb3;
+  top: 12px; left: 10px; box-shadow: 22px 18px 0 -2px #e8dfb3, 6px 28px 0 -4px #e8dfb3;
+}
+h1 {
+  font-family: var(--pixel);
+  font-size: clamp(20px, 5vw, 46px);
+  line-height: 1.25;
+  margin: 0;
+  color: var(--gold);
+  text-shadow: 4px 4px 0 #6b3e00, 8px 8px 0 rgba(0,0,0,.35);
+  letter-spacing: 2px;
+}
+.untertitel {
+  font-family: var(--pixel);
+  font-size: clamp(10px, 1.8vw, 14px);
+  color: var(--schnee);
+  margin-top: 14px;
+  text-shadow: 2px 2px 0 #000;
+}
+.status {
+  display: inline-block; margin-top: 18px;
+  padding: 8px 16px;
+  background: rgba(0,0,0,.35);
+  border: 3px solid #000; outline: 3px solid #555;
+  font-size: 22px;
+}
+.status b { color: var(--gold); font-weight: normal; }
+
+/* =========================================================================
+   KALENDER-RASTER
+   ========================================================================= */
+.kalender {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-auto-flow: dense;
+  gap: 12px;
+  padding: 22px;
+  /* Ziegel-/Steinwand */
+  background-color: #6f6f6f;
+  background-image:
+    linear-gradient(#555 2px, transparent 2px),
+    linear-gradient(90deg, #555 2px, transparent 2px),
+    linear-gradient(90deg, #555 2px, transparent 2px);
+  background-size: 64px 32px, 64px 32px, 64px 32px;
+  background-position: 0 0, 0 0, 32px 16px;
+  border: 6px solid #2a2a2a;
+  box-shadow: inset 0 0 0 4px #9a9a9a, 0 16px 0 #1e1e1e, 0 24px 40px rgba(0,0,0,.5);
+}
+/* Schnee auf der Wand */
+.kalender::before {
+  content: ""; position: absolute; left: -6px; right: -6px; top: -20px; height: 22px;
+  background:
+    linear-gradient(90deg, transparent 0 4%, var(--schnee) 4% 100%) bottom/100% 8px no-repeat,
+    var(--schnee);
+  clip-path: polygon(0 40%, 4% 20%, 9% 45%, 15% 15%, 22% 40%, 30% 10%, 38% 35%, 45% 20%, 53% 45%, 61% 15%, 69% 40%, 76% 20%, 84% 45%, 91% 15%, 100% 35%, 100% 100%, 0 100%);
+  box-shadow: 0 4px 0 #c9d6ef;
+}
+/* Lichterkette */
+.lichter {
+  position: absolute; left: 0; right: 0; top: -4px; height: 12px;
+  display: flex; justify-content: space-around; pointer-events: none; z-index: 2;
+}
+.lichter span {
+  width: 10px; height: 12px; border: 2px solid #000;
+  animation: blinken 1.6s steps(1) infinite;
+}
+.lichter span:nth-child(4n+1) { background: #ff4040; color: #ff4040; }
+.lichter span:nth-child(4n+2) { background: #40c4ff; color: #40c4ff; animation-delay: .4s; }
+.lichter span:nth-child(4n+3) { background: #ffd84a; color: #ffd84a; animation-delay: .8s; }
+.lichter span:nth-child(4n+4) { background: #5bd35b; color: #5bd35b; animation-delay: 1.2s; }
+@keyframes blinken {
+  0% { box-shadow: 0 0 10px 3px currentColor; opacity: 1; }
+  50% { box-shadow: none; opacity: .45; }
+}
+
+/* =========================================================================
+   TÜRCHEN
+   ========================================================================= */
+.tuer-platz {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  perspective: 900px;
+  background: #121212;
+  border: 4px solid #000;
+  box-shadow: inset 0 0 0 3px #2d2d2d;
+}
+.tuer-platz.gross { grid-column: span 2; grid-row: span 2; }
+
+/* Das Innere: Kiste */
+.innen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  background:
+    radial-gradient(circle at 50% 60%, rgba(255,216,74,.25), transparent 65%),
+    #1a1209;
+}
+.innen svg { width: 52%; height: auto; image-rendering: pixelated; filter: drop-shadow(0 4px 0 rgba(0,0,0,.5)); }
+.innen .haken {
+  font-family: var(--pixel); font-size: 9px; color: var(--gruen);
+  text-shadow: 1px 1px 0 #000; min-height: 10px;
+}
+
+/* Die Tür (klappt nach links auf) */
+.tuer {
+  position: absolute; inset: 0;
+  appearance: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+  transform-origin: left center;
+  transition: transform .9s cubic-bezier(.3,1.4,.5,1), filter .2s;
+  transform-style: preserve-3d;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--pixel);
+  color: #fff;
+  border: 4px solid rgba(0,0,0,.65);
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,.12), inset 0 -6px 0 rgba(0,0,0,.25);
+}
+.tuer:hover { filter: brightness(1.15); }
+.tuer:focus-visible { outline: 4px solid var(--gold); outline-offset: 2px; }
+.tuer-platz.offen .tuer { transform: rotateY(-108deg); box-shadow: inset 0 0 0 3px rgba(255,255,255,.12), -10px 0 20px rgba(0,0,0,.5); }
+
+/* Holzsorten */
+.holz-eiche  { background: repeating-linear-gradient(180deg, #a87a43 0 21%, #7d5a2f 21% 25%), #a87a43; }
+.holz-fichte { background: repeating-linear-gradient(180deg, #6e4b2a 0 21%, #4a311b 21% 25%), #6e4b2a; }
+.holz-birke  { background: repeating-linear-gradient(180deg, #d8c88c 0 21%, #aa9a62 21% 25%), #d8c88c; }
+.holz-karmin { background: repeating-linear-gradient(180deg, #7e3a56 0 21%, #5a2840 21% 25%), #7e3a56; }
+.holz-eis    { background: repeating-linear-gradient(135deg, #9fd0ff 0 12%, #82bdf5 12% 24%), #9fd0ff; }
+/* Maserung */
+.tuer::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 18%, rgba(0,0,0,.12) 18% 20%, transparent 20% 63%, rgba(0,0,0,.1) 63% 65%, transparent 65%),
+    linear-gradient(90deg, transparent 0 40%, rgba(255,255,255,.08) 40% 42%, transparent 42%);
+}
+/* Schneehaube */
+.tuer::after {
+  content: ""; position: absolute; left: -4px; right: -4px; top: -6px; height: 12px;
+  background: var(--schnee);
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 85% 80%, 70% 45%, 55% 100%, 40% 55%, 25% 90%, 10% 50%, 0 75%);
+}
+.nummer, .schloss { backface-visibility: hidden; }
+.nummer {
+  position: relative;
+  font-size: clamp(14px, 2.4vw, 26px);
+  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+.gross .nummer { font-size: clamp(26px, 6vw, 64px); color: var(--gold); }
+.holz-birke .nummer, .holz-eis .nummer { color: #fff; }
+
+/* Schloss für noch gesperrte Tage */
+.schloss {
+  position: absolute; bottom: 8%; right: 8%;
+  width: 22%; max-width: 26px; image-rendering: pixelated;
+}
+.tuer-platz.frei .schloss { display: none; }
+.tuer-platz.gesperrt .tuer { filter: saturate(.55) brightness(.8); cursor: not-allowed; }
+.tuer-platz.gesperrt .tuer:hover { filter: saturate(.55) brightness(.9); }
+.tuer-platz.heute .tuer { animation: pulsieren 1.8s ease-in-out infinite; }
+@keyframes pulsieren {
+  0%,100% { box-shadow: inset 0 0 0 3px rgba(255,255,255,.12), 0 0 0 0 rgba(255,216,74,.0); }
+  50% { box-shadow: inset 0 0 0 3px rgba(255,255,255,.12), 0 0 18px 6px rgba(255,216,74,.75); }
+}
+.wackeln { animation: wackeln .4s steps(2) 1 !important; }
+@keyframes wackeln {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* =========================================================================
+   BODEN
+   ========================================================================= */
+.boden {
+  position: relative; z-index: 1;
+  margin-top: 48px; height: 64px;
+  background:
+    linear-gradient(var(--schnee) 0 14px, #c9d6ef 14px 18px, transparent 18px),
+    repeating-linear-gradient(90deg, #7a5230 0 32px, #6a4526 32px 64px);
+  border-top: 4px solid #fff;
+}
+footer {
+  position: relative; z-index: 1;
+  text-align: center; color: var(--text-leise);
+  padding: 18px 16px 28px; font-size: 20px;
+  background: #5a3a1f;
+}
+
+/* =========================================================================
+   DIALOG (Rätsel)
+   ========================================================================= */
+dialog {
+  width: min(620px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 0; border: 0;
+  background: transparent; color: var(--text);
+}
+dialog::backdrop { background: rgba(5, 8, 20, .78); }
+.panel {
+  background: var(--panel);
+  border: 4px solid var(--panel-rand);
+  outline: 4px solid #4b557f;
+  box-shadow: 0 0 0 8px var(--panel-rand), 0 20px 60px rgba(0,0,0,.6);
+  padding: 22px;
+  margin: 8px;
+}
+.panel-kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.panel h2 {
+  font-family: var(--pixel); font-size: clamp(13px, 3vw, 18px);
+  color: var(--gold); margin: 0 0 4px; line-height: 1.4;
+  text-shadow: 2px 2px 0 #000;
+}
+.panel .art { color: var(--text-leise); font-size: 20px; }
+.zu {
+  appearance: none; cursor: pointer;
+  font-family: var(--pixel); font-size: 14px;
+  width: 36px; height: 36px; flex: none;
+  background: #8b2a2a; color: #fff;
+  border: 3px solid #000; box-shadow: inset -3px -3px 0 #5a1a1a, inset 3px 3px 0 #c04848;
+}
+.raetsel {
+  margin: 16px 0 18px;
+  padding: 14px 16px;
+  background: #e9dcb8; color: #2b2112;
+  border: 3px solid #5a4421;
+  box-shadow: inset 0 0 0 3px #d4c495;
+  font-size: 24px; line-height: 1.25;
+}
+.raetsel p { margin: 0 0 8px; }
+.raetsel p:last-child { margin-bottom: 0; }
+.raetsel code { font-family: var(--pixel); font-size: 13px; background: rgba(0,0,0,.08); padding: 2px 5px; }
+
+/* Lampen (Binär-Rätsel) */
+.lampen { display: inline-flex; gap: 4px; vertical-align: middle; margin: 0 4px; }
+.lampen i {
+  display: block; width: 18px; height: 18px; border: 2px solid #000;
+  background: #3b2a1a;
+  box-shadow: inset 2px 2px 0 #5a4430;
+}
+.lampen i.an { background: #ffcf57; box-shadow: inset 2px 2px 0 #fff3b8, 0 0 8px 2px rgba(255,207,87,.8); }
+
+.eingabe-titel { font-family: var(--pixel); font-size: 11px; color: var(--text-leise); margin-bottom: 10px; line-height: 1.6; }
+.koord { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.koord label { display: flex; flex-direction: column; gap: 6px; font-family: var(--pixel); font-size: 12px; }
+.koord label span.x { color: #ff7b7b; }
+.koord label span.y { color: #7bff8a; }
+.koord label span.z { color: #7bb8ff; }
+.koord input {
+  width: 100%; min-width: 0;
+  font-family: var(--lesen); font-size: 28px;
+  padding: 6px 10px;
+  background: #000; color: #fff;
+  border: 3px solid #a0a0a0; outline: none;
+  box-shadow: inset 0 0 0 2px #000;
+}
+.koord input:focus { border-color: #fff; }
+.knopf {
+  appearance: none; cursor: pointer; width: 100%; margin-top: 14px;
+  font-family: var(--pixel); font-size: 13px; color: #fff;
+  padding: 14px; text-shadow: 2px 2px 0 #3a3a3a;
+  background: #6f6f6f; border: 3px solid #000;
+  box-shadow: inset -4px -4px 0 #4a4a4a, inset 4px 4px 0 #a8a8a8;
+}
+.knopf:hover { background: #7c86c9; box-shadow: inset -4px -4px 0 #4f5893, inset 4px 4px 0 #a9b2ef; }
+.knopf:active { box-shadow: inset 4px 4px 0 #4a4a4a, inset -4px -4px 0 #a8a8a8; }
+.meldung { min-height: 28px; margin-top: 12px; font-size: 24px; text-align: center; }
+.meldung.falsch { color: var(--rot); }
+.meldung.fast { color: var(--gold); }
+.loesung {
+  display: none; margin-top: 8px; padding: 14px 16px;
+  background: #13361a; border: 3px solid #0a1f0e; outline: 3px solid #2f7a3c;
+}
+.loesung.zeigen { display: block; animation: auftauchen .5s ease-out; }
+.loesung .gross-koord { font-family: var(--pixel); font-size: clamp(12px, 3vw, 16px); color: #fff; margin: 8px 0; line-height: 1.6; }
+.loesung .tipp { color: #bff5c6; font-size: 24px; }
+.loesung h3 { font-family: var(--pixel); font-size: 13px; color: var(--gruen); margin: 0; }
+@keyframes auftauchen { from { transform: scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Hinweis-Toast */
+.toast {
+  position: fixed; left: 50%; bottom: 24px; z-index: 50;
+  transform: translate(-50%, 140%);
+  padding: 12px 18px; max-width: calc(100vw - 32px);
+  background: #000; color: #fff; border: 3px solid #555;
+  font-size: 22px; text-align: center;
+  transition: transform .3s ease, visibility .3s;
+  visibility: hidden;
+}
+.toast.zeigen { transform: translate(-50%, 0); visibility: visible; }
+
+/* Funken beim Lösen */
+.funke { position: fixed; width: 8px; height: 8px; z-index: 60; pointer-events: none; }
+
+/* =========================================================================
+   HANDY
+   ========================================================================= */
+/* 9 Spalten (groß) · 6 Spalten (Tablet, 24 normal groß) · 3 Spalten (Handy) */
+@media (max-width: 900px) {
+  .kalender { grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 14px; }
+  .tuer-platz.gross { grid-column: span 1; grid-row: span 1; }
+  .gross .nummer { font-size: clamp(14px, 3vw, 30px); }
+}
+@media (max-width: 900px) {
+  .mond { display: none; }
+}
+@media (max-width: 480px) {
+  .kalender { grid-template-columns: repeat(3, 1fr); }
+  .tuer-platz.gross { grid-column: span 2; grid-row: span 2; }
+  .gross .nummer { font-size: 48px; }
+  .koord { grid-template-columns: 1fr; }
+  .panel { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<canvas id="schnee" aria-hidden="true"></canvas>
+
+<div class="seite">
+  <div class="mond" aria-hidden="true"></div>
+  <header>
+    <h1 id="titel">ADVENTSKALENDER</h1>
+    <div class="untertitel" id="untertitel"></div>
+    <div class="status" id="status"></div>
+  </header>
+
+  <main class="kalender" id="kalender">
+    <div class="lichter" aria-hidden="true"></div>
+  </main>
+</div>
+
+<div class="boden" aria-hidden="true"></div>
+<footer id="fusszeile">Löse das Rätsel, finde die Koordinaten und hol dir die Kiste!</footer>
+
+<dialog id="dialog">
+  <div class="panel">
+    <div class="panel-kopf">
+      <div>
+        <h2 id="d-titel">Türchen 1</h2>
+        <div class="art" id="d-art"></div>
+      </div>
+      <button class="zu" id="d-zu" aria-label="Schließen">X</button>
+    </div>
+    <div class="raetsel" id="d-raetsel"></div>
+
+    <form id="d-form" autocomplete="off">
+      <div class="eingabe-titel">Wo liegt die Kiste? Gib die Koordinaten ein:</div>
+      <div class="koord">
+        <label><span class="x">X</span><input id="in-x" inputmode="numeric" placeholder="0" required></label>
+        <label><span class="y">Y</span><input id="in-y" inputmode="numeric" placeholder="64" required></label>
+        <label><span class="z">Z</span><input id="in-z" inputmode="numeric" placeholder="0" required></label>
+      </div>
+      <button class="knopf" type="submit">Prüfen</button>
+      <div class="meldung" id="d-meldung" role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="loesung" id="d-loesung">
+      <h3>Richtig!</h3>
+      <div class="gross-koord" id="d-koord"></div>
+      <div class="tipp" id="d-tipp"></div>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================================
+   ★★★ HIER ANPASSEN ★★★
+   =========================================================================
+   - jahr:        In welchem Dezember der Kalender läuft.
+   - toleranz:    Wie viele Blöcke daneben noch als "richtig" zählen.
+   - vorschauCode: Mit  index.html?vorschau=DEINCODE  sind alle Türen offen
+                  (zum Testen). Ändert den Code, damit niemand ihn errät!
+   - Bei jedem Tag:
+       raetsel: Text des Rätsels (HTML erlaubt, <p> für Absätze).
+                [[bin:141]] zeigt die Zahl 141 als 8 leuchtende Redstone-Lampen.
+       x, y, z: Die echten Koordinaten eurer Kiste.
+       tipp:    Wird nach der richtigen Lösung angezeigt (wo genau die Kiste liegt).
+   ========================================================================= */
+const EINSTELLUNGEN = {
+  titel: "ADVENTSKALENDER",
+  untertitel: "24 Rätsel · 24 versteckte Kisten",
+  jahr: 2026,
+  toleranz: 2,
+  vorschauCode: "schneemann42",
+};
+
+const TAGE = [
+  /* 1 */ { art: "Minecraft-Wissen", x: 64, y: 36, z: -16, tipp: "Unter einer Fackel, einen Block tief.",
+    raetsel: `<p><b>X</b> ist ein voller Stapel Erde.</p>
+              <p><b>Y</b> liegt so tief wie der Grundgestein-Boden der Welt, plus 100.</p>
+              <p><b>Z</b> ist ein voller Stapel Enderperlen, aber negativ.</p>` },
+
+  /* 2 */ { art: "Tierische Mathematik", x: 40, y: 70, z: 28, tipp: "Hinter einem Heuballen.",
+    raetsel: `<p><b>X:</b> Zähle die Beine von 5 Spinnen.</p>
+              <p><b>Y:</b> So viele Herzen hat ein Spieler, mal 7.</p>
+              <p><b>Z:</b> Die Tage einer Woche mal die Beine eines Creepers.</p>` },
+
+  /* 3 */ { art: "Altes Schild", x: 250, y: 70, z: -90, tipp: "Neben einem Schild mit römischen Zahlen.",
+    raetsel: `<p>Ein uraltes Schild im Schnee. Darauf steht:</p>
+              <p><code>X: CCL</code> &nbsp; <code>Y: LXX</code> &nbsp; <code>Z: −XC</code></p>` },
+
+  /* 4 */ { art: "Bauanleitung", x: 135, y: 63, z: -120, tipp: "In einem kleinen Schuppen.",
+    raetsel: `<p><b>X:</b> Wie viele Felder hat eine Werkbank? Mal 15.</p>
+              <p><b>Y:</b> Wie viele Wollblöcke braucht ein Bett? Mal 21.</p>
+              <p><b>Z:</b> Wie viele Rahmenblöcke hat ein Endportal? Mal −10.</p>` },
+
+  /* 5 */ { art: "Redstone-Lampen", x: 141, y: 68, z: -52, tipp: "Unter einer Redstone-Lampe.",
+    raetsel: `<p>Leuchtende Lampe = 1, dunkle Lampe = 0. Von links nach rechts: 128, 64, 32, 16, 8, 4, 2, 1.</p>
+              <p><b>X:</b> [[bin:141]]</p>
+              <p><b>Y:</b> [[bin:68]]</p>
+              <p><b>Z:</b> minus [[bin:52]]</p>` },
+
+  /* 6 */ { art: "Spiegelschrift", x: 380, y: 70, z: -15, tipp: "Auf einem Eisblock.",
+    raetsel: `<p>Ein Zettel, falsch herum geschrieben:</p>
+              <p><b>X:</b> <i>gizthcatrednuhierd</i></p>
+              <p><b>Y:</b> <i>gizbeis</i></p>
+              <p><b>Z:</b> <i>nhezfnüf sunim</i></p>` },
+
+  /* 7 */ { art: "Ausflug in den Nether", x: 200, y: 70, z: -80, tipp: "In der Oberwelt, neben einem Netherportal-Rahmen.",
+    raetsel: `<p>Ein Nether-Reisender schreibt: „Im Nether stand ich bei <b>X = 25</b> und <b>Z = −10</b>.“</p>
+              <p>Die Kiste liegt an der passenden Stelle <b>in der Oberwelt</b>, auf Höhe <b>Y = 70</b>.</p>
+              <p><i>Tipp: Ein Block im Nether …</i></p>` },
+
+  /* 8 */ { art: "Die Uhr tickt", x: 120, y: 64, z: -240, tipp: "Neben einer Uhr im Rahmen.",
+    raetsel: `<p>Ein Minecraft-Tag dauert 20 echte Minuten.</p>
+              <p><b>X:</b> Wie viele Minuten dauern 6 Minecraft-Tage?</p>
+              <p><b>Y:</b> Sekunden einer Minute, plus 4.</p>
+              <p><b>Z:</b> An welchem Dezembertag ist Heiligabend? Mal −10.</p>` },
+
+  /* 9 */ { art: "Zahlendetektiv", x: 150, y: 66, z: -300, tipp: "Unter einem Kürbis.",
+    raetsel: `<p><b>X</b> hat die Ziffern 1, 5 und 0. Sie ist größer als 100, kleiner als 200 und durch 50 teilbar.</p>
+              <p><b>Y</b> ist die Hälfte von 132.</p>
+              <p><b>Z</b> ist doppelt so groß wie X, aber negativ.</p>` },
+
+  /* 10 */ { art: "Mob-Steckbrief", x: 300, y: 70, z: -100, tipp: "In einem Schafgehege.",
+    raetsel: `<p><b>X:</b> Wie viele Köpfe hat der Wither? Mal 100.</p>
+              <p><b>Y:</b> Ein Stapel Eier plus ein Stapel Erde, minus 10.</p>
+              <p><b>Z:</b> Die Beine eines Schafs, mal −25.</p>` },
+
+  /* 11 */ { art: "Buchstaben-Code", x: 280, y: 64, z: -165, tipp: "Hinter einem Schneemann.",
+    raetsel: `<p>A = 1, B = 2, C = 3 … Z = 26. Addiere die Buchstaben.</p>
+              <p><b>X:</b> ENDE, mal 10.</p>
+              <p><b>Y:</b> SCHNEE, plus 10.</p>
+              <p><b>Z:</b> EIS, mal −5.</p>` },
+
+  /* 12 */ { art: "Kompass-Wanderung", x: 70, y: 72, z: -30, tipp: "Am Fuß einer großen Fichte.",
+    raetsel: `<p>Starte genau bei X = 0 und Z = 0.</p>
+              <p>Geh <b>100</b> Blöcke nach Osten, <b>50</b> nach Norden, <b>30</b> nach Westen und <b>20</b> nach Süden.</p>
+              <p>Die Kiste liegt auf Höhe <b>Y = 72</b>.</p>` },
+
+  /* 13 */ { art: "Zahlenfolgen", x: 160, y: 65, z: -81, tipp: "Zwischen zwei Laternen.",
+    raetsel: `<p>Wie geht es weiter?</p>
+              <p><b>X:</b> 5, 10, 20, 40, 80, …</p>
+              <p><b>Y:</b> 81, 77, 73, 69, …</p>
+              <p><b>Z:</b> −1, −3, −9, −27, …</p>` },
+
+  /* 14 */ { art: "Schmiede", x: 240, y: 70, z: -160, tipp: "Neben einem Amboss.",
+    raetsel: `<p><b>X:</b> Wie viele Eisenbarren braucht eine komplette Eisenrüstung? Mal 10.</p>
+              <p><b>Y:</b> Wie viele Blöcke braucht man, um einen Eisengolem zu bauen? Mal 14.</p>
+              <p><b>Z:</b> Wie viel Bruchstein braucht ein Ofen? Mal −20.</p>` },
+
+  /* 15 */ { art: "Morse-Funk", x: 200, y: 71, z: -39, tipp: "Unter einem Notenblock.",
+    raetsel: `<p>Ein Notenblock piept Morsezeichen:</p>
+              <p><b>X:</b> <code>..--- ----- -----</code></p>
+              <p><b>Y:</b> <code>--... .----</code></p>
+              <p><b>Z:</b> minus <code>...-- ----.</code></p>` },
+
+  /* 16 */ { art: "Kopfrechnen", x: 150, y: 65, z: -300, tipp: "In einer kleinen Höhle.",
+    raetsel: `<p><b>X</b> = (12 × 12) + 6</p>
+              <p><b>Y</b> = 1000 ÷ 8 − 60</p>
+              <p><b>Z</b> = −(7 × 7 × 7 − 43)</p>` },
+
+  /* 17 */ { art: "Weihnachtswörter", x: 280, y: 70, z: -210, tipp: "Neben einem geschmückten Baum.",
+    raetsel: `<p>Zähle die Buchstaben.</p>
+              <p><b>X:</b> WEIHNACHTSMANN, mal 20.</p>
+              <p><b>Y:</b> TANNENBAUM, mal 7.</p>
+              <p><b>Z:</b> RENTIER, mal −30.</p>` },
+
+  /* 18 */ { art: "Zeigerwinkel", x: 90, y: 63, z: -180, tipp: "Hinter einem Glockenturm.",
+    raetsel: `<p>Wie groß ist der Winkel zwischen den beiden Zeigern einer Uhr?</p>
+              <p><b>X:</b> um 3:00 Uhr.</p>
+              <p><b>Y:</b> um 2:00 Uhr, plus 3.</p>
+              <p><b>Z:</b> um 6:00 Uhr, aber negativ.</p>` },
+
+  /* 19 */ { art: "Redstone-Lampen II", x: 222, y: 66, z: -111, tipp: "In einem Redstone-Raum.",
+    raetsel: `<p>Du kennst das schon: Leuchtend = 1, dunkel = 0 (128 … 1).</p>
+              <p><b>X:</b> [[bin:222]]</p>
+              <p><b>Y:</b> [[bin:66]]</p>
+              <p><b>Z:</b> minus [[bin:111]]</p>` },
+
+  /* 20 */ { art: "Kalenderrechnung", x: 300, y: 72, z: -260, tipp: "Auf einem Hügel unter Schnee.",
+    raetsel: `<p><b>X:</b> Die Jahreszahl 2026, halbiert, minus 713.</p>
+              <p><b>Y:</b> Die Monate eines Jahres, mal 6.</p>
+              <p><b>Z:</b> Die Wochen eines Jahres, mal −5.</p>` },
+
+  /* 21 */ { art: "Spiegelzahlen", x: 240, y: 67, z: -135, tipp: "Hinter einem Spiegel aus Glas.",
+    raetsel: `<p>Lies die Zahlen rückwärts.</p>
+              <p><b>X:</b> 42 gespiegelt, mal 10.</p>
+              <p><b>Y:</b> 76 gespiegelt.</p>
+              <p><b>Z:</b> 531 gespiegelt, aber negativ.</p>` },
+
+  /* 22 */ { art: "Redstone-Meister", x: 225, y: 69, z: -180, tipp: "Am Ende einer Redstone-Leitung.",
+    raetsel: `<p>Ein Redstone-Signal reicht 15 Blöcke weit.</p>
+              <p><b>X:</b> 15 mal 15.</p>
+              <p><b>Y:</b> Die volle Signalstärke mal 4, plus 9.</p>
+              <p><b>Z:</b> Vier volle Signalweiten hintereinander, mal −3.</p>` },
+
+  /* 23 */ { art: "Fast geschafft", x: 276, y: 72, z: -248, tipp: "Unter einer Glocke.",
+    raetsel: `<p><b>X:</b> Zähle alle Türchennummern von 1 bis 23 zusammen.</p>
+              <p><b>Y:</b> Wie viele Türchen hat dieser Kalender? Mal 3.</p>
+              <p><b>Z:</b> Wieder alle Türchen, mal 10, plus 8, aber negativ.</p>` },
+
+  /* 24 */ { art: "Die große Bescherung", x: 24, y: 90, z: -24, tipp: "Der Geschenkeraum. Frohe Weihnachten!",
+    raetsel: `<p>In jeder der 23 Kisten lag ein Puzzleteil.</p>
+              <p>Legt alle Teile zusammen: Sie verraten die Koordinaten der <b>großen Weihnachtskiste</b>.</p>
+              <p>Frohe Weihnachten! 🎄</p>` },
+];
+
+/* Reihenfolge der Türchen im Raster (durcheinander, wie bei einem echten Kalender).
+   Die 24 ist die große Tür. */
+const REIHENFOLGE = [7, 15, 2, 24, 19, 11, 4, 22, 9, 13, 1, 17, 20, 6, 14, 3, 23, 10, 18, 5, 12, 21, 8, 16];
+
+/* =========================================================================
+   AB HIER: TECHNIK (muss man nicht anfassen)
+   ========================================================================= */
+const HOLZ = ["holz-eiche", "holz-fichte", "holz-birke", "holz-karmin", "holz-eis"];
+const SPEICHER_KEY = "block-adventskalender-" + EINSTELLUNGEN.jahr;
+
+function laden() {
+  try { return JSON.parse(localStorage.getItem(SPEICHER_KEY)) || { offen: [], geloest: [] }; }
+  catch (e) { return { offen: [], geloest: [] }; }
+}
+function speichern() {
+  try { localStorage.setItem(SPEICHER_KEY, JSON.stringify(zustand)); } catch (e) { /* egal */ }
+}
+let zustand = laden();
+
+const vorschau = new URLSearchParams(location.search).get("vorschau") === EINSTELLUNGEN.vorschauCode;
+
+function istFrei(tag) {
+  if (vorschau) return true;
+  return new Date() >= new Date(EINSTELLUNGEN.jahr, 11, tag);
+}
+function istHeute(tag) {
+  const n = new Date();
+  return n.getFullYear() === EINSTELLUNGEN.jahr && n.getMonth() === 11 && n.getDate() === tag;
+}
+function tageBis(tag) {
+  const ziel = new Date(EINSTELLUNGEN.jahr, 11, tag);
+  return Math.ceil((ziel - new Date()) / 86400000);
+}
+
+/* Pixel-Grafiken */
+const KISTE_SVG = `<svg viewBox="0 0 16 14" shape-rendering="crispEdges" aria-hidden="true">
+  <rect x="0" y="1" width="16" height="13" fill="#2a1a08"/>
+  <rect x="1" y="2" width="14" height="4" fill="#a4692b"/>
+  <rect x="1" y="2" width="14" height="1" fill="#c88a45"/>
+  <rect x="1" y="6" width="14" height="1" fill="#2a1a08"/>
+  <rect x="1" y="7" width="14" height="6" fill="#8d5823"/>
+  <rect x="1" y="7" width="14" height="1" fill="#a4692b"/>
+  <rect x="1" y="12" width="14" height="1" fill="#6b4119"/>
+  <rect x="7" y="5" width="2" height="4" fill="#2a2a2a"/>
+  <rect x="7" y="5" width="2" height="3" fill="#d7d7d7"/>
+  <rect x="7" y="5" width="1" height="1" fill="#ffffff"/>
+</svg>`;
+const SCHLOSS_SVG = `<svg viewBox="0 0 8 9" shape-rendering="crispEdges" class="schloss" aria-hidden="true">
+  <rect x="2" y="0" width="4" height="1" fill="#1a1a1a"/>
+  <rect x="1" y="1" width="1" height="3" fill="#1a1a1a"/><rect x="6" y="1" width="1" height="3" fill="#1a1a1a"/>
+  <rect x="2" y="1" width="4" height="1" fill="#cfcfcf"/>
+  <rect x="0" y="4" width="8" height="5" fill="#1a1a1a"/>
+  <rect x="1" y="4" width="6" height="4" fill="#bdbdbd"/>
+  <rect x="1" y="4" width="6" height="1" fill="#e8e8e8"/>
+  <rect x="3" y="5" width="2" height="2" fill="#333"/>
+</svg>`;
+
+/* Kalender aufbauen */
+const kalender = document.getElementById("kalender");
+document.getElementById("titel").textContent = EINSTELLUNGEN.titel;
+document.getElementById("untertitel").textContent = EINSTELLUNGEN.untertitel;
+
+const lichter = kalender.querySelector(".lichter");
+for (let i = 0; i < 22; i++) lichter.appendChild(document.createElement("span"));
+
+REIHENFOLGE.forEach((tag, i) => {
+  const platz = document.createElement("div");
+  platz.className = "tuer-platz" + (tag === 24 ? " gross" : "");
+  platz.dataset.tag = tag;
+  platz.innerHTML = `
+    <div class="innen">${KISTE_SVG}<div class="haken"></div></div>
+    <button class="tuer ${tag === 24 ? "holz-karmin" : HOLZ[(tag * 7 + i) % HOLZ.length]}" aria-label="Türchen ${tag}">
+      <span class="nummer">${tag}</span>${SCHLOSS_SVG}
+    </button>`;
+  platz.querySelector(".tuer").addEventListener("click", () => tuerKlick(tag, platz));
+  platz.querySelector(".innen").addEventListener("click", () => oeffneRaetsel(tag));
+  kalender.appendChild(platz);
+});
+
+function aktualisieren() {
+  document.querySelectorAll(".tuer-platz").forEach(platz => {
+    const tag = +platz.dataset.tag;
+    const frei = istFrei(tag);
+    const offen = zustand.offen.includes(tag);
+    const geloest = zustand.geloest.includes(tag);
+    platz.classList.toggle("frei", frei);
+    platz.classList.toggle("gesperrt", !frei);
+    platz.classList.toggle("offen", offen && frei);
+    platz.classList.toggle("heute", istHeute(tag) && !offen);
+    platz.querySelector(".haken").textContent = geloest ? "✔ GEFUNDEN" : "";
+    platz.querySelector(".tuer").setAttribute("aria-label",
+      `Türchen ${tag}` + (!frei ? " (noch verschlossen)" : geloest ? " (gelöst)" : ""));
+  });
+
+  const status = document.getElementById("status");
+  const jetzt = new Date();
+  const start = new Date(EINSTELLUNGEN.jahr, 11, 1);
+  if (vorschau) {
+    status.innerHTML = `<b>Vorschau-Modus</b>: alle Türchen sind offen`;
+  } else if (jetzt < start) {
+    const t = tageBis(1);
+    status.innerHTML = `Noch <b>${t}</b> ${t === 1 ? "Tag" : "Tage"} bis zum ersten Türchen`;
+  } else {
+    status.innerHTML = `<b>${zustand.geloest.length}</b> von 24 Kisten gefunden`;
+  }
+}
+
+function tuerKlick(tag, platz) {
+  if (!istFrei(tag)) {
+    const t = tageBis(tag);
+    zeigeToast(`Türchen ${tag} ist noch verschlossen. Noch ${t} ${t === 1 ? "Tag" : "Tage"}!`);
+    const tuer = platz.querySelector(".tuer");
+    tuer.classList.remove("wackeln"); void tuer.offsetWidth; tuer.classList.add("wackeln");
+    return;
+  }
+  if (!zustand.offen.includes(tag)) {
+    zustand.offen.push(tag); speichern(); aktualisieren();
+    setTimeout(() => oeffneRaetsel(tag), 650);
+  } else {
+    oeffneRaetsel(tag);
+  }
+}
+
+/* Rätsel-Dialog */
+const dialog = document.getElementById("dialog");
+const form = document.getElementById("d-form");
+let aktuellerTag = null;
+
+function lampen(zahl) {
+  let html = '<span class="lampen" role="img" aria-label="Lampenreihe">';
+  for (let b = 7; b >= 0; b--) html += `<i class="${(zahl >> b) & 1 ? "an" : ""}"></i>`;
+  return html + "</span>";
+}
+
+function oeffneRaetsel(tag) {
+  if (!istFrei(tag)) return;
+  aktuellerTag = tag;
+  const d = TAGE[tag - 1];
+  document.getElementById("d-titel").textContent = `Türchen ${tag}`;
+  document.getElementById("d-art").textContent = d.art || "";
+  document.getElementById("d-raetsel").innerHTML =
+    d.raetsel.replace(/\[\[bin:(\d+)\]\]/g, (_, n) => lampen(+n));
+  document.getElementById("d-meldung").textContent = "";
+  document.getElementById("d-meldung").className = "meldung";
+  ["x", "y", "z"].forEach(k => document.getElementById("in-" + k).value = "");
+
+  if (zustand.geloest.includes(tag)) zeigeLoesung(d, false);
+  else { document.getElementById("d-loesung").classList.remove("zeigen"); form.style.display = ""; }
+
+  if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open", "");
+}
+
+function zeigeLoesung(d, feiern) {
+  form.style.display = "none";
+  document.getElementById("d-koord").innerHTML =
+    `<span style="color:#ff7b7b">X ${d.x}</span> · <span style="color:#7bff8a">Y ${d.y}</span> · <span style="color:#7bb8ff">Z ${d.z}</span>`;
+  document.getElementById("d-tipp").textContent = d.tipp ? "Versteck: " + d.tipp : "";
+  document.getElementById("d-loesung").classList.add("zeigen");
+  if (feiern) funken();
+}
+
+function zahl(s) {
+  const n = parseInt(String(s).replace(/[−–]/g, "-").replace(/\s/g, ""), 10);
+  return Number.isNaN(n) ? null : n;
+}
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const d = TAGE[aktuellerTag - 1];
+  const x = zahl(document.getElementById("in-x").value);
+  const y = zahl(document.getElementById("in-y").value);
+  const z = zahl(document.getElementById("in-z").value);
+  const meldung = document.getElementById("d-meldung");
+  if (x === null || y === null || z === null) {
+    meldung.textContent = "Bitte drei ganze Zahlen eingeben.";
+    meldung.className = "meldung falsch"; return;
+  }
+  const tol = EINSTELLUNGEN.toleranz;
+  const richtig = [Math.abs(x - d.x) <= tol, Math.abs(y - d.y) <= tol, Math.abs(z - d.z) <= tol];
+  const anzahl = richtig.filter(Boolean).length;
+  if (anzahl === 3) {
+    if (!zustand.geloest.includes(aktuellerTag)) zustand.geloest.push(aktuellerTag);
+    speichern(); aktualisieren(); zeigeLoesung(d, true);
+  } else if (anzahl > 0) {
+    meldung.textContent = `Fast! ${anzahl} von 3 Koordinaten stimmen.`;
+    meldung.className = "meldung fast";
+  } else {
+    meldung.textContent = "Leider falsch. Denk noch mal nach!";
+    meldung.className = "meldung falsch";
+  }
+});
+
+document.getElementById("d-zu").addEventListener("click", () => dialog.close());
+dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+
+/* Toast */
+let toastTimer;
+function zeigeToast(text) {
+  const t = document.getElementById("toast");
+  t.textContent = text; t.classList.add("zeigen");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("zeigen"), 2600);
+}
+
+/* Funken / Feuerwerk beim Lösen */
+function funken() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const farben = ["#ffd84a", "#ff5a5a", "#5bd35b", "#40c4ff", "#ffffff"];
+  const r = dialog.querySelector(".panel").getBoundingClientRect();
+  for (let i = 0; i < 40; i++) {
+    const f = document.createElement("div");
+    f.className = "funke";
+    f.style.background = farben[i % farben.length];
+    const sx = r.left + r.width / 2, sy = r.top + r.height / 2;
+    f.style.left = sx + "px"; f.style.top = sy + "px";
+    document.body.appendChild(f);
+    const w = Math.random() * Math.PI * 2, d = 120 + Math.random() * 220;
+    f.animate([
+      { transform: "translate(0,0)", opacity: 1 },
+      { transform: `translate(${Math.cos(w) * d}px, ${Math.sin(w) * d + 80}px)`, opacity: 0 }
+    ], { duration: 900 + Math.random() * 600, easing: "cubic-bezier(.2,.8,.3,1)" }).onfinish = () => f.remove();
+  }
+}
+
+/* Pixel-Schnee */
+(function schnee() {
+  const c = document.getElementById("schnee");
+  const ctx = c.getContext("2d");
+  const ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let flocken = [];
+  function groesse() {
+    c.width = innerWidth; c.height = innerHeight;
+    const anzahl = Math.round(innerWidth * innerHeight / 9000);
+    flocken = Array.from({ length: anzahl }, () => ({
+      x: Math.random() * c.width, y: Math.random() * c.height,
+      s: Math.random() < .25 ? 4 : 2, v: .4 + Math.random() * 1.1, w: Math.random() * 6
+    }));
+  }
+  function malen() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.fillStyle = "rgba(255,255,255,.85)";
+    for (const f of flocken) {
+      ctx.fillRect(Math.round(f.x), Math.round(f.y), f.s, f.s);
+      if (!ruhig) {
+        f.y += f.v; f.w += .01; f.x += Math.sin(f.w) * .3;
+        if (f.y > c.height) { f.y = -4; f.x = Math.random() * c.width; }
+      }
+    }
+    if (!ruhig) requestAnimationFrame(malen);
+  }
+  addEventListener("resize", () => { groesse(); if (ruhig) malen(); });
+  groesse(); malen();
+})();
+
+aktualisieren();
+setInterval(aktualisieren, 60000); /* um Mitternacht geht das neue Türchen von selbst auf */
+</script>
+</body>
+</html>
