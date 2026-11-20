@@ -15,7 +15,7 @@ Alles steckt in **einer einzigen Datei**: `index.html`. Es braucht keinen Server
 
 - `jahr`: in welchem Dezember der Kalender läuft
 - `toleranz`: wie viele Blöcke daneben noch als richtig zählen
-- `vorschauCode`: mit `index.html?vorschau=DEINCODE` sind alle Türen sofort offen (zum Testen). **Ändert den Code!**
+- `vorschauCode`: Geheimcode. Unten auf der Seite gibt es den Knopf **„Code eingeben“**: Wer den Code eintippt, bekommt sofort alle Türchen frei (das Gerät merkt sich das, „Wieder sperren“ macht es rückgängig). Alternativ geht `index.html?vorschau=DEINCODE`. **Ändert den Code!**
 - Pro Tag: `raetsel`, `x`, `y`, `z`, `tipp`
 
 Tipp: Erst die Kisten im Spiel verstecken und die Koordinaten notieren (Java: `F3`), dann die Rätsel so anpassen, dass genau diese Zahlen herauskommen.

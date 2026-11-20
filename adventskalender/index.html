@@ -337,6 +337,20 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
 @keyframes auftauchen { from { transform: scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* Hinweis-Toast */
+/* Code-Schloss in der Fußzeile */
+.code-knopf {
+  appearance: none; cursor: pointer; margin-top: 12px;
+  font-family: var(--pixel); font-size: 10px; color: #e8e8e8;
+  padding: 10px 14px; text-shadow: 1px 1px 0 #000;
+  background: #3a2614; border: 3px solid #000;
+  box-shadow: inset -3px -3px 0 #24170b, inset 3px 3px 0 #6a4526;
+}
+.code-knopf:hover { color: var(--gold); }
+#code-dialog { width: min(420px, calc(100vw - 32px)); }
+#code-dialog .koord { grid-template-columns: 1fr; }
+.code-hinweis { color: var(--text-leise); font-size: 20px; margin: 10px 0 0; }
+.knopf.rot { background: #8b2a2a; box-shadow: inset -4px -4px 0 #5a1a1a, inset 4px 4px 0 #c04848; }
+
 .toast {
   position: fixed; left: 50%; bottom: 24px; z-index: 50;
   transform: translate(-50%, 140%);
@@ -392,7 +406,33 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
 </div>
 
 <div class="boden" aria-hidden="true"></div>
-<footer id="fusszeile">Löse das Rätsel, finde die Koordinaten und hol dir die Kiste!</footer>
+<footer>
+  <div id="fusszeile">Löse das Rätsel, finde die Koordinaten und hol dir die Kiste!</div>
+  <button class="code-knopf" id="code-knopf" type="button">Code eingeben</button>
+</footer>
+
+<dialog id="code-dialog">
+  <div class="panel">
+    <div class="panel-kopf">
+      <div>
+        <h2>Geheimcode</h2>
+        <div class="art" id="code-art">Schaltet alle Türchen sofort frei.</div>
+      </div>
+      <button class="zu" id="code-zu" type="button" aria-label="Schließen">X</button>
+    </div>
+    <form id="code-form" autocomplete="off">
+      <div class="koord" style="margin-top:16px">
+        <label><span>Code</span><input id="code-in" type="password" placeholder="••••••" required></label>
+      </div>
+      <button class="knopf" type="submit">Entsperren</button>
+      <div class="meldung" id="code-meldung" role="status" aria-live="polite"></div>
+    </form>
+    <div id="code-offen" hidden>
+      <p class="code-hinweis">Alle Türchen sind auf diesem Gerät entsperrt.</p>
+      <button class="knopf rot" id="code-sperren" type="button">Wieder sperren</button>
+    </div>
+  </div>
+</dialog>
 
 <dialog id="dialog">
   <div class="panel">
@@ -432,8 +472,10 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
    =========================================================================
    - jahr:        In welchem Dezember der Kalender läuft.
    - toleranz:    Wie viele Blöcke daneben noch als "richtig" zählen.
-   - vorschauCode: Mit  index.html?vorschau=DEINCODE  sind alle Türen offen
-                  (zum Testen). Ändert den Code, damit niemand ihn errät!
+   - vorschauCode: Unten auf der Seite gibt es den Knopf "Code eingeben".
+                  Wer diesen Code eintippt, bekommt sofort ALLE Türchen frei
+                  (das Gerät merkt sich das). Alternativ geht auch
+                  index.html?vorschau=DEINCODE. Ändert den Code!
    - Bei jedem Tag:
        raetsel: Text des Rätsels (HTML erlaubt, <p> für Absätze).
                 [[bin:141]] zeigt die Zahl 141 als 8 leuchtende Redstone-Lampen.
@@ -599,7 +641,8 @@ function speichern() {
 }
 let zustand = laden();
 
-const vorschau = new URLSearchParams(location.search).get("vorschau") === EINSTELLUNGEN.vorschauCode;
+const urlVorschau = new URLSearchParams(location.search).get("vorschau") === EINSTELLUNGEN.vorschauCode;
+let vorschau = urlVorschau || zustand.alleFrei === true;
 
 function istFrei(tag) {
   if (vorschau) return true;
@@ -678,7 +721,7 @@ function aktualisieren() {
   const jetzt = new Date();
   const start = new Date(EINSTELLUNGEN.jahr, 11, 1);
   if (vorschau) {
-    status.innerHTML = `<b>Vorschau-Modus</b>: alle Türchen sind offen`;
+    status.innerHTML = `<b>Alle Türchen entsperrt</b> · ${zustand.geloest.length} von 24 Kisten gefunden`;
   } else if (jetzt < start) {
     const t = tageBis(1);
     status.innerHTML = `Noch <b>${t}</b> ${t === 1 ? "Tag" : "Tage"} bis zum ersten Türchen`;
@@ -832,6 +875,50 @@ function funken() {
   addEventListener("resize", () => { groesse(); if (ruhig) malen(); });
   groesse(); malen();
 })();
+
+/* Code-Eingabe: alle Türchen freischalten */
+const codeDialog = document.getElementById("code-dialog");
+const codeForm = document.getElementById("code-form");
+const codeOffen = document.getElementById("code-offen");
+function codeAnsicht() {
+  codeForm.hidden = vorschau;
+  codeOffen.hidden = !vorschau;
+  document.getElementById("code-art").textContent =
+    vorschau ? "Schon entsperrt." : "Schaltet alle Türchen sofort frei.";
+}
+document.getElementById("code-knopf").addEventListener("click", () => {
+  codeAnsicht();
+  document.getElementById("code-in").value = "";
+  document.getElementById("code-meldung").textContent = "";
+  codeDialog.showModal();
+  if (!vorschau) document.getElementById("code-in").focus();
+});
+codeForm.addEventListener("submit", e => {
+  e.preventDefault();
+  const eingabe = document.getElementById("code-in").value.trim().toLowerCase();
+  const meldung = document.getElementById("code-meldung");
+  if (eingabe === EINSTELLUNGEN.vorschauCode.toLowerCase()) {
+    vorschau = true; zustand.alleFrei = true; speichern(); aktualisieren();
+    codeDialog.close();
+    zeigeToast("Code richtig! Alle Türchen sind entsperrt.");
+    document.querySelectorAll(".tuer-platz").forEach((p, i) => {
+      const t = p.querySelector(".tuer");
+      setTimeout(() => { t.classList.remove("wackeln"); void t.offsetWidth; t.classList.add("wackeln"); }, i * 40);
+    });
+  } else {
+    meldung.textContent = "Falscher Code.";
+    meldung.className = "meldung falsch";
+    const f = document.getElementById("code-in");
+    f.classList.remove("wackeln"); void f.offsetWidth; f.classList.add("wackeln");
+  }
+});
+document.getElementById("code-sperren").addEventListener("click", () => {
+  zustand.alleFrei = false; vorschau = urlVorschau; speichern(); aktualisieren();
+  codeDialog.close();
+  zeigeToast("Türchen sind wieder nach Datum gesperrt.");
+});
+document.getElementById("code-zu").addEventListener("click", () => codeDialog.close());
+codeDialog.addEventListener("click", e => { if (e.target === codeDialog) codeDialog.close(); });
 
 aktualisieren();
 setInterval(aktualisieren, 60000); /* um Mitternacht geht das neue Türchen von selbst auf */
