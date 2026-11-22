@@ -2,48 +2,44 @@
 
 Ein Adventskalender im Pixel-Look für eure Minecraft-Runde.
 Hinter jedem Türchen steckt ein Rätsel. Die Lösung sind **Koordinaten**, an denen ihr im Spiel eine Kiste versteckt habt.
+In jeder Kiste liegt ein Puzzleteil (ein Wort), das die Spieler auf der **Schilder-Tafel** eintragen.
 
-Die Seite besteht aus **zwei Dateien**:
-- `index.html`: der Kalender mit allen Rätseln
-- `tafel.php`: speichert die Schilder-Tafel, damit alle Spieler dasselbe sehen (braucht einen Webspace mit PHP, keine Datenbank)
+## Die zwei Dateien
+- `index.html`: die Seite (Aussehen, Kalender, Tafel). Hier steht **nichts Geheimes**.
+- `server.php`: alles Geheime: Rätsel, Koordinaten, Verstecke, Schilder-Wörter, Vorschau-Code, Admin-Passwort.
+  Die Seite fragt den Server und bekommt immer nur, was heute schon dran ist.
+
+Ihr braucht einen Webspace mit PHP, aber keine Datenbank. Gespeichert wird in `tafel-daten.json`, die der Server selbst anlegt.
 
 ## So funktioniert es
-- Türchen *n* lässt sich erst ab dem *n*. Dezember öffnen. Davor wackelt es und zeigt an, wie viele Tage es noch dauert.
-- Die Spieler geben X, Y und Z ein. Ist alles richtig (±2 Blöcke), erscheinen die Koordinaten und euer Zusatzhinweis zum Versteck.
-- Der Browser merkt sich, welche Türchen schon offen bzw. gelöst sind (pro Gerät).
-
-## Die Schilder-Tafel
-Unter dem Kalender hängen 23 Schilder, eins für jedes Puzzleteil. Wer ein Teil gefunden hat, klickt auf das Schild mit der Nummer, schreibt das Wort drauf und wählt eine von 16 Farben.
-- **Nur das richtige Wort passt auf das richtige Schild.** Die Lösungen stehen nur in `tafel.php` (Liste `RICHTIG`) auf dem Server, nicht in der Seite. Groß-/Kleinschreibung, Satzzeichen, ä/ae und ß/ss sind egal.
-- Schild *n* lässt sich erst ab dem *n*. Dezember beschriften, damit niemand vorher Wörter errät. Zum Ausprobieren in `tafel.php` `TESTMODUS = true` setzen und danach wieder auf `false`.
-- Nach jedem Versuch, ob richtig oder falsch, muss man 3 Sekunden warten.
-- Alle Besucher sehen die Schilder nach wenigen Sekunden, ohne neu zu laden.
-- Darunter steht der ganze Satz, so weit er schon bekannt ist, und eine Liste, wer zuletzt was geschrieben hat.
-- Gespeichert wird in `tafel-daten.json`. Die Datei legt `tafel.php` beim ersten Eintrag selbst an.
-- **Admin-Passwort** in `tafel.php` ändern (`ADMIN_PASSWORT`). Damit kann man unten auf der Seite über „Code eingeben“ → „Admin: Tafel leeren“ alle Schilder löschen. Spieler selbst können Schilder nicht löschen. Solange es `bitte-aendern` heißt, ist Leeren gesperrt.
+- **Türchen:** Türchen *n* geht ab dem *n*. Dezember auf. Erst dann gibt der Server das Rätsel heraus. Wer vorher im Quelltext nachschaut, findet nichts.
+- **Lösen:** Die Spieler geben X, Y und Z ein. Der Server prüft die Antwort (±2 Blöcke). Ist sie richtig, kommen die Koordinaten und das Versteck. Der Browser merkt sich gelöste Türchen.
+- **Schilder-Tafel:** 23 Schilder, eins pro Puzzleteil. Nur das richtige Wort passt auf das richtige Schild, und alle sehen es nach wenigen Sekunden. Schild *n* lässt sich erst ab dem *n*. Dezember beschriften.
+- **Gegen Raten:** Nach jedem Versuch (Koordinaten, Schild oder falscher Code) muss man 3 Sekunden warten.
+- **Vorschau-Code:** Unten auf der Seite gibt es „Code eingeben“. Mit dem richtigen Code sind alle Türchen und Schilder sofort benutzbar, gut zum Testen. „Wieder sperren“ macht es rückgängig.
+- **Admin:** Unter „Code eingeben“ → „Admin: Tafel leeren“ löscht ihr mit dem Admin-Passwort alle Schilder, z. B. nach dem Testen.
 
 ## Anpassen
-Öffnet `index.html` in einem Texteditor und sucht nach **`HIER ANPASSEN`**:
+In **`server.php`** ganz oben (`HIER ANPASSEN`):
+- `ADMIN_PASSWORT` **ändern**. Solange es `bitte-aendern` heißt, ist Leeren gesperrt.
+- `VORSCHAU_CODE` **ändern**.
+- `JAHR`, `TOLERANZ`
+- `TAGE`: pro Türchen `art`, `x`, `y`, `z`, `tipp` und `raetsel` (HTML erlaubt, `[[bin:141]]` zeigt 141 als Redstone-Lampen)
+- `RICHTIG`: welches Wort auf welches Schild gehört
 
-- `jahr`: in welchem Dezember der Kalender läuft
-- `toleranz`: wie viele Blöcke daneben noch als richtig zählen
-- `vorschauCode`: Geheimcode. Unten auf der Seite gibt es den Knopf **„Code eingeben“**: Wer den Code eintippt, bekommt sofort alle Türchen frei (das Gerät merkt sich das, „Wieder sperren“ macht es rückgängig). Alternativ geht `index.html?vorschau=DEINCODE`. **Ändert den Code!**
-- Pro Tag: `raetsel`, `x`, `y`, `z`, `tipp`
+In **`index.html`** (`HIER ANPASSEN`) stehen nur noch Titel, Untertitel und das Jahr. Das Jahr muss zu `server.php` passen.
 
 Tipp: Erst die Kisten im Spiel verstecken und die Koordinaten notieren (Java: `F3`), dann die Rätsel so anpassen, dass genau diese Zahlen herauskommen.
 
-`[[bin:141]]` im Rätseltext zeigt die Zahl 141 als Reihe von Redstone-Lampen (Binärcode).
-
 ## Auf die Webseite bringen
-**Variante A: als eigene Seite.** `index.html` **und** `tafel.php` zusammen in denselben Ordner auf euren Webspace hochladen (z. B. `/adventskalender/`). Der Ordner muss beschreibbar sein, damit `tafel-daten.json` angelegt werden kann (bei den meisten Webspaces ist das automatisch so).
+`index.html` **und** `server.php` zusammen in denselben Ordner auf euren Webspace hochladen (z. B. `/adventskalender/`).
+Der Ordner muss beschreibbar sein, damit `tafel-daten.json` angelegt werden kann (bei den meisten Webspaces ist das automatisch so).
 
-**Variante B: in eine bestehende Seite einbetten.**
+In eine bestehende Seite einbetten:
 ```html
 <iframe src="/adventskalender/index.html"
         style="width:100%; height:900px; border:0;"
         title="Adventskalender"></iframe>
 ```
 
-## Gut zu wissen
-Die Lösungen stehen im Quelltext der Seite. Wer im Browser „Seitenquelltext anzeigen“ benutzt, könnte schummeln.
-Für eine Runde unter Freunden reicht das meistens. Wenn ihr das verhindern wollt, braucht es einen kleinen Server, der die Antworten prüft.
+Wer die `index.html` einfach am PC doppelklickt, sieht nur die verschlossenen Türen. Rätsel und Tafel brauchen den Server.
