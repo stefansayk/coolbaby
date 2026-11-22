@@ -411,6 +411,9 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
 }
 .schild .wort.lang { font-size: clamp(15px, 1.8vw, 21px); }
 .schild .wort.leer { color: rgba(60,38,15,.45); }
+.schild.zu-frueh { filter: saturate(.4) brightness(.6); cursor: not-allowed; }
+.schild.zu-frueh:hover { transform: none; }
+.schild .ab { position: absolute; bottom: 3px; right: 6px; font-family: var(--pixel); font-size: 8px; color: #3c2a12; }
 .schild.neu { animation: neu 1.2s ease-out; }
 @keyframes neu { 0% { box-shadow: 0 0 0 0 rgba(255,216,74,1), inset 0 0 0 3px #d0a26a; } 100% { box-shadow: 0 0 0 16px rgba(255,216,74,0), inset 0 0 0 3px #d0a26a; } }
 
@@ -499,7 +502,7 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
 
   <section class="tafel-bereich" aria-labelledby="tafel-titel">
     <h2 class="tafel-titel" id="tafel-titel">DIE SCHILDER-TAFEL</h2>
-    <p class="tafel-info">Habt ihr ein Puzzleteil gefunden? Klickt auf das Schild mit seiner Nummer und schreibt das Wort drauf. Alle sehen es sofort.</p>
+    <p class="tafel-info">Habt ihr ein Puzzleteil gefunden? Klickt auf das Schild mit seiner Nummer und schreibt das Wort drauf. Nur das richtige Wort passt auf das richtige Schild, und alle sehen es sofort.</p>
     <div class="tafel" id="tafel"></div>
     <div class="tafel-fehler" id="tafel-fehler" role="status" aria-live="polite"></div>
     <div class="satz" id="satz"><b>EUER SATZ BIS JETZT</b><div id="satz-text"></div></div>
@@ -582,7 +585,7 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
     <div class="panel-kopf">
       <div>
         <h2 id="s-titel">Schild 1</h2>
-        <div class="art">Schreib das Wort aus deinem Puzzleteil drauf.</div>
+        <div class="art">Schreib genau das Wort aus deinem Puzzleteil drauf.</div>
       </div>
       <button class="zu" id="s-zu" type="button" aria-label="Schließen">X</button>
     </div>
@@ -591,10 +594,7 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
       <label class="feld">Wort<input id="s-wort" maxlength="30" placeholder="z. B. bei X"></label>
       <div class="feld">Farbe<div class="farben" id="s-farben"></div></div>
       <label class="feld">Dein Name<input id="s-name" maxlength="16" placeholder="Minecraft-Name"></label>
-      <div class="knopf-reihe">
-        <button class="knopf" type="submit">Aufschreiben</button>
-        <button class="knopf rot" type="button" id="s-leeren">Leeren</button>
-      </div>
+      <button class="knopf" type="submit">Aufschreiben</button>
       <div class="meldung" id="s-meldung" role="status" aria-live="polite"></div>
     </form>
   </div>
@@ -752,7 +752,7 @@ const TAGE = [
               <p><b>Y:</b> Wie viele Türchen hat dieser Kalender? Mal 3.</p>
               <p><b>Z:</b> Wieder alle Türchen, mal 10, plus 8, aber negativ.</p>` },
 
-  /* 24 */ { art: "Die große Bescherung", x: 24, y: 90, z: -24, tipp: "Im geheimen Geschenkeraum. Frohe Weihnachten!",
+  /* 24 */ { art: "Die große Bescherung", x: 24, y: 90, z: -24, tipp: "Ihr habt es geschafft! Viel Spaß mit der Bescherung.",
     raetsel: `<p>In jeder der 23 Kisten lag ein Puzzleteil.</p>
               <p>Legt alle Teile der Reihe nach zusammen: Erst mit dem letzten Teil kennt ihr die Koordinaten der <b>großen Weihnachtskiste</b>.</p>
               <p>Frohe Weihnachten! 🎄</p>` },
@@ -1105,6 +1105,11 @@ function tafelZeichnen(vorher) {
       b.title = `Schild ${n}: noch leer`;
       b.setAttribute("aria-label", `Schild ${n}: noch leer`);
     }
+    const frueh = !e && !istFrei(+n);
+    b.classList.toggle("zu-frueh", frueh);
+    let ab = b.querySelector(".ab");
+    if (frueh && !ab) { ab = document.createElement("span"); ab.className = "ab"; b.appendChild(ab); }
+    if (ab) { ab.textContent = frueh ? `ab ${n}.12.` : ""; }
     if (vorher && JSON.stringify(vorher[n]) !== JSON.stringify(e) && e) {
       b.classList.remove("neu"); void b.offsetWidth; b.classList.add("neu");
     }
@@ -1197,6 +1202,10 @@ wortFeld.addEventListener("input", vorschauZeichnen);
 farbenEl.addEventListener("change", vorschauZeichnen);
 
 function schildOeffnen(n) {
+  if (!(tafelDaten.schilder || {})[n] && !istFrei(n)) {
+    zeigeToast(`Schild ${n} kann erst ab dem ${n}. Dezember beschriftet werden.`);
+    return;
+  }
   offenesSchild = n;
   const e = (tafelDaten.schilder || {})[n];
   document.getElementById("s-titel").textContent = `Schild ${n}`;
@@ -1221,17 +1230,19 @@ async function schildSpeichern(wort) {
   try {
     await tafelSenden({ aktion: "schreiben", schild: offenesSchild, wort, farbe: gewaehlteFarbe(), name });
     schildDialog.close();
-    zeigeToast(wort ? `Schild ${offenesSchild} beschriftet!` : `Schild ${offenesSchild} geleert.`);
+    zeigeToast(`Richtig! Schild ${offenesSchild} ist beschriftet.`);
   } catch (e) {
     meldung.textContent = e.message; meldung.className = "meldung falsch";
+    const v = document.querySelector(".vorschau-schild");
+    v.classList.remove("wackeln"); void v.offsetWidth; v.classList.add("wackeln");
   }
 }
 document.getElementById("s-form").addEventListener("submit", e => {
   e.preventDefault();
-  if (!wortFeld.value.trim()) { schildSpeichern(""); return; }
+  const m = document.getElementById("s-meldung");
+  if (!wortFeld.value.trim()) { m.textContent = "Bitte schreib ein Wort."; m.className = "meldung falsch"; wortFeld.focus(); return; }
   schildSpeichern(wortFeld.value.trim());
 });
-document.getElementById("s-leeren").addEventListener("click", () => schildSpeichern(""));
 document.getElementById("s-zu").addEventListener("click", () => schildDialog.close());
 schildDialog.addEventListener("click", e => { if (e.target === schildDialog) schildDialog.close(); });
 

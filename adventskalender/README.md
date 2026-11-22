@@ -14,10 +14,13 @@ Die Seite besteht aus **zwei Dateien**:
 
 ## Die Schilder-Tafel
 Unter dem Kalender hängen 23 Schilder, eins für jedes Puzzleteil. Wer ein Teil gefunden hat, klickt auf das Schild mit der Nummer, schreibt das Wort drauf und wählt eine von 16 Farben.
+- **Nur das richtige Wort passt auf das richtige Schild.** Die Lösungen stehen nur in `tafel.php` (Liste `RICHTIG`) auf dem Server, nicht in der Seite. Groß-/Kleinschreibung, Satzzeichen, ä/ae und ß/ss sind egal.
+- Schild *n* lässt sich erst ab dem *n*. Dezember beschriften, damit niemand vorher Wörter errät. Zum Ausprobieren in `tafel.php` `TESTMODUS = true` setzen und danach wieder auf `false`.
+- Nach jedem Versuch, ob richtig oder falsch, muss man 3 Sekunden warten.
 - Alle Besucher sehen die Schilder nach wenigen Sekunden, ohne neu zu laden.
 - Darunter steht der ganze Satz, so weit er schon bekannt ist, und eine Liste, wer zuletzt was geschrieben hat.
 - Gespeichert wird in `tafel-daten.json`. Die Datei legt `tafel.php` beim ersten Eintrag selbst an.
-- **Admin-Passwort** in `tafel.php` ändern (`ADMIN_PASSWORT`). Damit kann man unten auf der Seite über „Code eingeben“ → „Admin: Tafel leeren“ alle Schilder löschen. Solange es `bitte-aendern` heißt, ist Leeren gesperrt.
+- **Admin-Passwort** in `tafel.php` ändern (`ADMIN_PASSWORT`). Damit kann man unten auf der Seite über „Code eingeben“ → „Admin: Tafel leeren“ alle Schilder löschen. Spieler selbst können Schilder nicht löschen. Solange es `bitte-aendern` heißt, ist Leeren gesperrt.
 
 ## Anpassen
 Öffnet `index.html` in einem Texteditor und sucht nach **`HIER ANPASSEN`**:
