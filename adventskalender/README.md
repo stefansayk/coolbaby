@@ -3,12 +3,21 @@
 Ein Adventskalender im Pixel-Look für eure Minecraft-Runde.
 Hinter jedem Türchen steckt ein Rätsel. Die Lösung sind **Koordinaten**, an denen ihr im Spiel eine Kiste versteckt habt.
 
-Alles steckt in **einer einzigen Datei**: `index.html`. Es braucht keinen Server, keine Datenbank und keine Installation.
+Die Seite besteht aus **zwei Dateien**:
+- `index.html`: der Kalender mit allen Rätseln
+- `tafel.php`: speichert die Schilder-Tafel, damit alle Spieler dasselbe sehen (braucht einen Webspace mit PHP, keine Datenbank)
 
 ## So funktioniert es
 - Türchen *n* lässt sich erst ab dem *n*. Dezember öffnen. Davor wackelt es und zeigt an, wie viele Tage es noch dauert.
 - Die Spieler geben X, Y und Z ein. Ist alles richtig (±2 Blöcke), erscheinen die Koordinaten und euer Zusatzhinweis zum Versteck.
 - Der Browser merkt sich, welche Türchen schon offen bzw. gelöst sind (pro Gerät).
+
+## Die Schilder-Tafel
+Unter dem Kalender hängen 23 Schilder, eins für jedes Puzzleteil. Wer ein Teil gefunden hat, klickt auf das Schild mit der Nummer, schreibt das Wort drauf und wählt eine von 16 Farben.
+- Alle Besucher sehen die Schilder nach wenigen Sekunden, ohne neu zu laden.
+- Darunter steht der ganze Satz, so weit er schon bekannt ist, und eine Liste, wer zuletzt was geschrieben hat.
+- Gespeichert wird in `tafel-daten.json`. Die Datei legt `tafel.php` beim ersten Eintrag selbst an.
+- **Admin-Passwort** in `tafel.php` ändern (`ADMIN_PASSWORT`). Damit kann man unten auf der Seite über „Code eingeben“ → „Admin: Tafel leeren“ alle Schilder löschen. Solange es `bitte-aendern` heißt, ist Leeren gesperrt.
 
 ## Anpassen
 Öffnet `index.html` in einem Texteditor und sucht nach **`HIER ANPASSEN`**:
@@ -23,7 +32,7 @@ Tipp: Erst die Kisten im Spiel verstecken und die Koordinaten notieren (Java: `F
 `[[bin:141]]` im Rätseltext zeigt die Zahl 141 als Reihe von Redstone-Lampen (Binärcode).
 
 ## Auf die Webseite bringen
-**Variante A: als eigene Seite.** `index.html` auf euren Webspace hochladen (z. B. in einen Ordner `/adventskalender/`).
+**Variante A: als eigene Seite.** `index.html` **und** `tafel.php` zusammen in denselben Ordner auf euren Webspace hochladen (z. B. `/adventskalender/`). Der Ordner muss beschreibbar sein, damit `tafel-daten.json` angelegt werden kann (bei den meisten Webspaces ist das automatisch so).
 
 **Variante B: in eine bestehende Seite einbetten.**
 ```html
