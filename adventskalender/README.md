@@ -12,9 +12,9 @@ In jeder Kiste liegt ein Puzzleteil (ein Wort), das die Spieler auf der **Schild
 Ihr braucht einen Webspace mit PHP, aber keine Datenbank. Gespeichert wird in `tafel-daten.json`, die der Server selbst anlegt.
 
 ## So funktioniert es
-- **Türchen:** Türchen *n* geht ab dem *n*. Dezember auf. Erst dann gibt der Server das Rätsel heraus. Wer vorher im Quelltext nachschaut, findet nichts.
+- **Türchen:** Türchen *n* geht am *n*. Dezember um **16 Uhr** auf (`UHRZEIT` in `server.php`). Erst dann gibt der Server das Rätsel heraus. Wer vorher im Quelltext nachschaut, findet nichts.
 - **Lösen:** Die Spieler geben X, Y und Z ein. Der Server prüft die Antwort (±2 Blöcke). Ist sie richtig, kommen die Koordinaten und ein Tipp (`TIPP_STANDARD` in `server.php`): Ist auf der Höhe kein Block, liegt die Kiste beim nächsten Block weiter unten. Der Browser merkt sich gelöste Türchen.
-- **Schilder-Tafel:** 23 Schilder, eins pro Puzzleteil. Nur das richtige Wort passt auf das richtige Schild, und alle sehen es nach wenigen Sekunden. Schild *n* lässt sich erst ab dem *n*. Dezember beschriften.
+- **Schilder-Tafel:** 23 Schilder, eins pro Puzzleteil. Nur das richtige Wort passt auf das richtige Schild, und alle sehen es nach wenigen Sekunden. Schild *n* lässt sich erst ab dem *n*. Dezember um 16 Uhr beschriften.
 - **Gegen Raten:** Nach jedem Versuch (Koordinaten, Schild oder falscher Code) muss man 3 Sekunden warten.
 - **Vorschau-Code:** Unten auf der Seite gibt es „Code eingeben“. Mit dem richtigen Code sind alle Türchen und Schilder sofort benutzbar, gut zum Testen. „Wieder sperren“ macht es rückgängig.
 - **Admin:** Unter „Code eingeben“ → „Admin: Tafel leeren“ löscht ihr mit dem Admin-Passwort alle Schilder, z. B. nach dem Testen.
@@ -23,12 +23,12 @@ Ihr braucht einen Webspace mit PHP, aber keine Datenbank. Gespeichert wird in `t
 In **`server.php`** ganz oben (`HIER ANPASSEN`):
 - `ADMIN_PASSWORT` **ändern**. Solange es `bitte-aendern` heißt, ist Leeren gesperrt.
 - `VORSCHAU_CODE` **ändern**.
-- `JAHR`, `TOLERANZ`
+- `JAHR`, `UHRZEIT` (wann das Türchen des Tages aufgeht), `TOLERANZ`
 - `TIPP_STANDARD`: der Tipp nach jeder richtigen Lösung
 - `TAGE`: pro Türchen `art`, `x`, `y`, `z`, `tipp` (leer = Standard-Tipp) und `raetsel` (HTML erlaubt, `[[bin:141]]` zeigt 141 als Redstone-Lampen)
 - `RICHTIG`: welches Wort auf welches Schild gehört
 
-In **`index.html`** (`HIER ANPASSEN`) stehen nur noch Titel, Untertitel und das Jahr. Das Jahr muss zu `server.php` passen.
+In **`index.html`** (`HIER ANPASSEN`) stehen nur noch Titel, Untertitel, Jahr und Uhrzeit. Jahr und Uhrzeit müssen zu `server.php` passen.
 
 Tipp: Erst die Kisten im Spiel verstecken und die Koordinaten notieren (Java: `F3`), dann die Rätsel so anpassen, dass genau diese Zahlen herauskommen.
 

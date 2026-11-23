@@ -610,13 +610,15 @@ dialog::backdrop { background: rgba(5, 8, 20, .78); }
    stehen NICHT hier, sondern in server.php (damit niemand im Quelltext
    spicken kann). Hier nur das Aussehen:
    - titel / untertitel: Überschrift der Seite
-   - jahr:   In welchem Dezember der Kalender läuft (muss zu server.php passen)
+   - jahr:    In welchem Dezember der Kalender läuft (muss zu server.php passen)
+   - uhrzeit: Um wie viel Uhr das Türchen des Tages aufgeht (muss zu server.php passen)
    - server: Adresse der server.php (liegt normalerweise im selben Ordner)
    ========================================================================= */
 const EINSTELLUNGEN = {
   titel: "ADVENTSKALENDER",
   untertitel: "24 Rätsel · 24 versteckte Kisten",
   jahr: 2026,
+  uhrzeit: 16,
   server: "server.php",
 };
 
@@ -664,17 +666,31 @@ async function frageServer(daten) {
   return json;
 }
 
+/* Türchen n öffnet am n. Dezember um EINSTELLUNGEN.uhrzeit (z. B. 16:00 Uhr) */
+function freiAb(tag) { return new Date(EINSTELLUNGEN.jahr, 11, tag, EINSTELLUNGEN.uhrzeit); }
 function istFrei(tag) {
   if (vorschau) return true;
-  return new Date() >= new Date(EINSTELLUNGEN.jahr, 11, tag);
+  return new Date() >= freiAb(tag);
 }
 function istHeute(tag) {
   const n = new Date();
   return n.getFullYear() === EINSTELLUNGEN.jahr && n.getMonth() === 11 && n.getDate() === tag;
 }
+/* Kalendertage bis zum Tag (morgen = 1), unabhängig von der Uhrzeit */
 function tageBis(tag) {
-  const ziel = new Date(EINSTELLUNGEN.jahr, 11, tag);
-  return Math.ceil((ziel - new Date()) / 86400000);
+  const n = new Date();
+  return Math.round((new Date(EINSTELLUNGEN.jahr, 11, tag) - new Date(n.getFullYear(), n.getMonth(), n.getDate())) / 86400000);
+}
+/* "heute um 16 Uhr (noch 2 Std. 5 Min.)" oder "am 5. Dezember um 16 Uhr" */
+function wann(tag) {
+  const uhr = `um ${EINSTELLUNGEN.uhrzeit} Uhr`;
+  if (istHeute(tag)) {
+    const min = Math.max(1, Math.ceil((freiAb(tag) - new Date()) / 60000));
+    const rest = min >= 60 ? `${Math.floor(min / 60)} Std. ${min % 60} Min.` : `${min} Min.`;
+    return `heute ${uhr} (noch ${rest})`;
+  }
+  if (tageBis(tag) === 1) return `morgen ${uhr}`;
+  return `am ${tag}. Dezember ${uhr}`;
 }
 
 /* Pixel-Grafiken */
@@ -731,7 +747,7 @@ function aktualisieren() {
     platz.classList.toggle("frei", frei);
     platz.classList.toggle("gesperrt", !frei);
     platz.classList.toggle("offen", offen && frei);
-    platz.classList.toggle("heute", istHeute(tag) && !offen);
+    platz.classList.toggle("heute", istHeute(tag) && frei && !offen);
     platz.querySelector(".haken").textContent = geloest ? "✔ GEFUNDEN" : "";
     platz.querySelector(".tuer").setAttribute("aria-label",
       `Türchen ${tag}` + (!frei ? " (noch verschlossen)" : geloest ? " (gelöst)" : ""));
@@ -739,21 +755,28 @@ function aktualisieren() {
 
   const status = document.getElementById("status");
   const jetzt = new Date();
-  const start = new Date(EINSTELLUNGEN.jahr, 11, 1);
+  const start = freiAb(1);
   if (vorschau) {
     status.innerHTML = `<b>Alle Türchen entsperrt</b> · ${zustand.geloest.length} von 24 Kisten gefunden`;
   } else if (jetzt < start) {
-    const t = tageBis(1);
-    status.innerHTML = `Noch <b>${t}</b> ${t === 1 ? "Tag" : "Tage"} bis zum ersten Türchen`;
+    if (tageBis(1) <= 1) {
+      status.innerHTML = `Das erste Türchen öffnet <b>${wann(1)}</b>`;
+    } else {
+      const t = tageBis(1);
+      status.innerHTML = `Noch <b>${t}</b> ${t === 1 ? "Tag" : "Tage"} bis zum ersten Türchen (1.12., ${EINSTELLUNGEN.uhrzeit} Uhr)`;
+    }
   } else {
     status.innerHTML = `<b>${zustand.geloest.length}</b> von 24 Kisten gefunden`;
+    const heute = jetzt.getMonth() === 11 ? jetzt.getDate() : 0;
+    if (heute >= 1 && heute <= 24 && !istFrei(heute)) {
+      status.innerHTML += ` · Türchen ${heute} öffnet <b>heute um ${EINSTELLUNGEN.uhrzeit} Uhr</b>`;
+    }
   }
 }
 
 function tuerKlick(tag, platz) {
   if (!istFrei(tag)) {
-    const t = tageBis(tag);
-    zeigeToast(`Türchen ${tag} ist noch verschlossen. Noch ${t} ${t === 1 ? "Tag" : "Tage"}!`);
+    zeigeToast(`Türchen ${tag} öffnet ${wann(tag)}.`);
     const tuer = platz.querySelector(".tuer");
     tuer.classList.remove("wackeln"); void tuer.offsetWidth; tuer.classList.add("wackeln");
     return;
@@ -1021,7 +1044,7 @@ function tafelZeichnen(vorher) {
     b.classList.toggle("zu-frueh", frueh);
     let ab = b.querySelector(".ab");
     if (frueh && !ab) { ab = document.createElement("span"); ab.className = "ab"; b.appendChild(ab); }
-    if (ab) { ab.textContent = frueh ? `ab ${n}.12.` : ""; }
+    if (ab) { ab.textContent = frueh ? `ab ${n}.12. ${EINSTELLUNGEN.uhrzeit} Uhr` : ""; }
     if (vorher && JSON.stringify(vorher[n]) !== JSON.stringify(e) && e) {
       b.classList.remove("neu"); void b.offsetWidth; b.classList.add("neu");
     }
@@ -1111,7 +1134,7 @@ farbenEl.addEventListener("change", vorschauZeichnen);
 
 function schildOeffnen(n) {
   if (!(tafelDaten.schilder || {})[n] && !istFrei(n)) {
-    zeigeToast(`Schild ${n} kann erst ab dem ${n}. Dezember beschriftet werden.`);
+    zeigeToast(`Schild ${n} kann erst ${wann(n)} beschriftet werden.`);
     return;
   }
   offenesSchild = n;
@@ -1170,7 +1193,7 @@ setInterval(() => { if (!document.hidden && !schildDialog.open) tafelLaden(); },
 document.addEventListener("visibilitychange", () => { if (!document.hidden) tafelLaden(); });
 
 aktualisieren();
-setInterval(aktualisieren, 60000); /* um Mitternacht geht das neue Türchen von selbst auf */
+setInterval(aktualisieren, 60000); /* um 16 Uhr geht das neue Türchen von selbst auf */
 </script>
 </body>
 </html>

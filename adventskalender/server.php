@@ -16,6 +16,7 @@
    VORSCHAU_CODE:  Wer diesen Code unten auf der Seite eingibt, kann ALLE
                    Türchen und Schilder sofort benutzen (zum Testen).
    JAHR:           In welchem Dezember der Kalender läuft.
+   UHRZEIT:        Um wie viel Uhr das Türchen des Tages aufgeht (16 = 16:00 Uhr).
    TOLERANZ:       Wie viele Blöcke daneben noch als richtig zählen.
    TIPP_STANDARD:  Hinweis, der nach der richtigen Lösung angezeigt wird.
    TAGE:           Pro Türchen: Rätsel (HTML erlaubt), Koordinaten und ein
@@ -27,6 +28,7 @@
 const ADMIN_PASSWORT = 'bitte-aendern';
 const VORSCHAU_CODE  = 'schneemann42';
 const JAHR = 2026;
+const UHRZEIT = 16;   // Türchen n öffnet am n. Dezember um diese Uhrzeit (deutsche Zeit)
 const TOLERANZ = 2;
 
 /* Dieser Tipp erscheint nach der richtigen Lösung bei jedem Türchen.
@@ -321,9 +323,9 @@ function code_ok($eingabe) {
   return $c !== '' && hash_equals(mb_strtolower(VORSCHAU_CODE, 'UTF-8'), $c);
 }
 
-/* Tag n ist ab dem n. Dezember frei (oder sofort mit dem Vorschau-Code) */
+/* Tag n ist ab dem n. Dezember um UHRZEIT frei (oder sofort mit dem Vorschau-Code) */
 function frei($n, $eingabe) {
-  return code_ok($eingabe) || time() >= mktime(0, 0, 0, 12, $n, JAHR);
+  return code_ok($eingabe) || time() >= mktime(UHRZEIT, 0, 0, 12, $n, JAHR);
 }
 
 function datei_lesen($fh) {
@@ -381,7 +383,7 @@ $aktion = isset($eingabe['aktion']) ? $eingabe['aktion'] : '';
 if ($aktion === 'raetsel') {
   $tag = isset($eingabe['tag']) ? (int)$eingabe['tag'] : 0;
   if (!isset(TAGE[$tag])) antwort(['fehler' => 'Dieses Türchen gibt es nicht.'], 400);
-  if (!frei($tag, $eingabe)) antwort(['fehler' => "Türchen $tag ist noch verschlossen."], 403);
+  if (!frei($tag, $eingabe)) antwort(['fehler' => "Türchen $tag ist noch verschlossen. Es öffnet am $tag. Dezember um " . UHRZEIT . " Uhr."], 403);
   antwort(['tag' => $tag, 'art' => TAGE[$tag]['art'], 'raetsel' => TAGE[$tag]['raetsel']]);
 }
 
@@ -399,7 +401,7 @@ if ($aktion === 'code') {
 if ($aktion === 'pruefen') {
   $tag = isset($eingabe['tag']) ? (int)$eingabe['tag'] : 0;
   if (!isset(TAGE[$tag])) antwort(['fehler' => 'Dieses Türchen gibt es nicht.'], 400);
-  if (!frei($tag, $eingabe)) antwort(['fehler' => "Türchen $tag ist noch verschlossen."], 403);
+  if (!frei($tag, $eingabe)) antwort(['fehler' => "Türchen $tag ist noch verschlossen. Es öffnet am $tag. Dezember um " . UHRZEIT . " Uhr."], 403);
   foreach (['x', 'y', 'z'] as $k) {
     if (!isset($eingabe[$k]) || !is_numeric($eingabe[$k])) antwort(['fehler' => 'Bitte drei ganze Zahlen eingeben.'], 400);
   }
@@ -432,7 +434,7 @@ if ($aktion !== 'schreiben') antwort(['fehler' => 'Unbekannte Aktion.'], 400);
 
 $nr = isset($eingabe['schild']) ? (int)$eingabe['schild'] : 0;
 if ($nr < 1 || $nr > ANZAHL_SCHILDER) antwort(['fehler' => 'Dieses Schild gibt es nicht.'], 400);
-if (!frei($nr, $eingabe)) antwort(['fehler' => "Schild $nr kann erst ab dem $nr. Dezember beschriftet werden."], 403);
+if (!frei($nr, $eingabe)) antwort(['fehler' => "Schild $nr kann erst ab dem $nr. Dezember um " . UHRZEIT . " Uhr beschriftet werden."], 403);
 
 $wort = text(isset($eingabe['wort']) ? $eingabe['wort'] : '', MAX_WORT);
 $name = text(isset($eingabe['name']) ? $eingabe['name'] : '', MAX_NAME);
