@@ -812,7 +812,7 @@ function zeigeLoesung(d, feiern) {
   form.style.display = "none";
   document.getElementById("d-koord").innerHTML =
     `<span style="color:#ff7b7b">X ${d.x}</span> · <span style="color:#7bff8a">Y ${d.y}</span> · <span style="color:#7bb8ff">Z ${d.z}</span>`;
-  document.getElementById("d-tipp").textContent = d.tipp ? "Versteck: " + d.tipp : "";
+  document.getElementById("d-tipp").textContent = d.tipp ? "Tipp: " + d.tipp : "";
   document.getElementById("d-loesung").classList.add("zeigen");
   if (feiern) funken();
 }

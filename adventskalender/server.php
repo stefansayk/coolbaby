@@ -17,7 +17,9 @@
                    Türchen und Schilder sofort benutzen (zum Testen).
    JAHR:           In welchem Dezember der Kalender läuft.
    TOLERANZ:       Wie viele Blöcke daneben noch als richtig zählen.
-   TAGE:           Pro Türchen: Rätsel (HTML erlaubt), Koordinaten, Versteck.
+   TIPP_STANDARD:  Hinweis, der nach der richtigen Lösung angezeigt wird.
+   TAGE:           Pro Türchen: Rätsel (HTML erlaubt), Koordinaten und ein
+                   eigener Tipp (leer lassen = TIPP_STANDARD).
                    [[bin:141]] zeigt die Zahl 141 als Redstone-Lampen.
    RICHTIG:        Was auf welches Schild der Tafel gehört (= Puzzleteile).
                    Groß-/Kleinschreibung, Satzzeichen, ä/ae und ß/ss sind egal.
@@ -27,11 +29,15 @@ const VORSCHAU_CODE  = 'schneemann42';
 const JAHR = 2026;
 const TOLERANZ = 2;
 
+/* Dieser Tipp erscheint nach der richtigen Lösung bei jedem Türchen.
+   Wollt ihr bei einem Türchen etwas Eigenes, tragt es dort bei 'tipp' ein. */
+const TIPP_STANDARD = 'Ist auf dieser Höhe kein Block? Dann sucht die Kiste beim nächsten Block weiter unten.';
+
 const TAGE = [
   1 => [
     'art'  => 'Minecraft-Wissen',
     'x' => 64, 'y' => 36, 'z' => -16,
-    'tipp' => 'Unter einer Fackel, einen Block tief.',
+    'tipp' => '',
     'raetsel' => '<p><b>X</b> ist ein voller Stapel Erde.</p>
     <p><b>Y</b> liegt so tief wie der Grundgestein-Boden der Welt, plus 100.</p>
     <p><b>Z</b> ist ein voller Stapel Enderperlen, aber negativ.</p>',
@@ -39,7 +45,7 @@ const TAGE = [
   2 => [
     'art'  => 'Tierische Mathematik',
     'x' => 40, 'y' => 70, 'z' => 28,
-    'tipp' => 'Hinter einem Heuballen.',
+    'tipp' => '',
     'raetsel' => '<p><b>X:</b> Zähle die Beine von 5 Spinnen.</p>
     <p><b>Y:</b> So viele Herzen hat ein Spieler, mal 7.</p>
     <p><b>Z:</b> Die Tage einer Woche mal die Beine eines Creepers.</p>',
@@ -47,14 +53,14 @@ const TAGE = [
   3 => [
     'art'  => 'Altes Schild',
     'x' => 250, 'y' => 70, 'z' => -90,
-    'tipp' => 'Neben einem Schild mit römischen Zahlen.',
+    'tipp' => '',
     'raetsel' => '<p>Ein uraltes Schild im Schnee. Darauf steht:</p>
     <p><code>X: CCL</code> &nbsp; <code>Y: LXX</code> &nbsp; <code>Z: −XC</code></p>',
   ],
   4 => [
     'art'  => 'Bauanleitung',
     'x' => 135, 'y' => 63, 'z' => -120,
-    'tipp' => 'In einem kleinen Schuppen.',
+    'tipp' => '',
     'raetsel' => '<p><b>X:</b> Wie viele Felder hat eine Werkbank? Mal 15.</p>
     <p><b>Y:</b> Wie viele Wollblöcke braucht ein Bett? Mal 21.</p>
     <p><b>Z:</b> Wie viele Rahmenblöcke hat ein Endportal? Mal −10.</p>',
@@ -62,7 +68,7 @@ const TAGE = [
   5 => [
     'art'  => 'Redstone-Lampen',
     'x' => 141, 'y' => 68, 'z' => -52,
-    'tipp' => 'Unter einer Redstone-Lampe.',
+    'tipp' => '',
     'raetsel' => '<p>Leuchtende Lampe = 1, dunkle Lampe = 0. Von links nach rechts: 128, 64, 32, 16, 8, 4, 2, 1.</p>
     <p><b>X:</b> [[bin:141]]</p>
     <p><b>Y:</b> [[bin:68]]</p>
@@ -71,7 +77,7 @@ const TAGE = [
   6 => [
     'art'  => 'Spiegelschrift',
     'x' => 380, 'y' => 70, 'z' => -15,
-    'tipp' => 'Auf einem Eisblock.',
+    'tipp' => '',
     'raetsel' => '<p>Ein Zettel, falsch herum geschrieben:</p>
     <p><b>X:</b> <i>gizthcatrednuhierd</i></p>
     <p><b>Y:</b> <i>gizbeis</i></p>
@@ -80,7 +86,7 @@ const TAGE = [
   7 => [
     'art'  => 'Ausflug in den Nether',
     'x' => 200, 'y' => 70, 'z' => -80,
-    'tipp' => 'In der Oberwelt, neben einem Netherportal-Rahmen.',
+    'tipp' => '',
     'raetsel' => '<p>Ein Nether-Reisender schreibt: „Im Nether stand ich bei <b>X = 25</b> und <b>Z = −10</b>.“</p>
     <p>Die Kiste liegt an der passenden Stelle <b>in der Oberwelt</b>, auf Höhe <b>Y = 70</b>.</p>
     <p><i>Tipp: Ein Block im Nether …</i></p>',
@@ -88,7 +94,7 @@ const TAGE = [
   8 => [
     'art'  => 'Die Uhr tickt',
     'x' => 120, 'y' => 64, 'z' => -240,
-    'tipp' => 'Neben einer Uhr im Rahmen.',
+    'tipp' => '',
     'raetsel' => '<p>Ein Minecraft-Tag dauert 20 echte Minuten.</p>
     <p><b>X:</b> Wie viele Minuten dauern 6 Minecraft-Tage?</p>
     <p><b>Y:</b> Sekunden einer Minute, plus 4.</p>
@@ -97,7 +103,7 @@ const TAGE = [
   9 => [
     'art'  => 'Zahlendetektiv',
     'x' => 150, 'y' => 66, 'z' => -300,
-    'tipp' => 'Unter einem Kürbis.',
+    'tipp' => '',
     'raetsel' => '<p><b>X</b> hat die Ziffern 1, 5 und 0. Sie ist größer als 100, kleiner als 200 und durch 50 teilbar.</p>
     <p><b>Y</b> ist die Hälfte von 132.</p>
     <p><b>Z</b> ist doppelt so groß wie X, aber negativ.</p>',
@@ -105,7 +111,7 @@ const TAGE = [
   10 => [
     'art'  => 'Mob-Steckbrief',
     'x' => 300, 'y' => 70, 'z' => -100,
-    'tipp' => 'In einem Schafgehege.',
+    'tipp' => '',
     'raetsel' => '<p><b>X:</b> Wie viele Köpfe hat der Wither? Mal 100.</p>
     <p><b>Y:</b> Ein Stapel Eier plus ein Stapel Erde, minus 10.</p>
     <p><b>Z:</b> Die Beine eines Schafs, mal −25.</p>',
@@ -113,7 +119,7 @@ const TAGE = [
   11 => [
     'art'  => 'Buchstaben-Code',
     'x' => 280, 'y' => 64, 'z' => -165,
-    'tipp' => 'Hinter einem Schneemann.',
+    'tipp' => '',
     'raetsel' => '<p>A = 1, B = 2, C = 3 … Z = 26. Addiere die Buchstaben.</p>
     <p><b>X:</b> ENDE, mal 10.</p>
     <p><b>Y:</b> SCHNEE, plus 10.</p>
@@ -122,7 +128,7 @@ const TAGE = [
   12 => [
     'art'  => 'Kompass-Wanderung',
     'x' => 70, 'y' => 72, 'z' => -30,
-    'tipp' => 'Am Fuß einer großen Fichte.',
+    'tipp' => '',
     'raetsel' => '<p>Starte genau bei X = 0 und Z = 0.</p>
     <p>Geh <b>100</b> Blöcke nach Osten, <b>50</b> nach Norden, <b>30</b> nach Westen und <b>20</b> nach Süden.</p>
     <p>Die Kiste liegt auf Höhe <b>Y = 72</b>.</p>',
@@ -130,7 +136,7 @@ const TAGE = [
   13 => [
     'art'  => 'Zahlenfolgen',
     'x' => 160, 'y' => 65, 'z' => -81,
-    'tipp' => 'Zwischen zwei Laternen.',
+    'tipp' => '',
     'raetsel' => '<p>Wie geht es weiter?</p>
     <p><b>X:</b> 5, 10, 20, 40, 80, …</p>
     <p><b>Y:</b> 81, 77, 73, 69, …</p>
@@ -139,7 +145,7 @@ const TAGE = [
   14 => [
     'art'  => 'Schmiede',
     'x' => 240, 'y' => 70, 'z' => -160,
-    'tipp' => 'Neben einem Amboss.',
+    'tipp' => '',
     'raetsel' => '<p><b>X:</b> Wie viele Eisenbarren braucht eine komplette Eisenrüstung? Mal 10.</p>
     <p><b>Y:</b> Wie viele Blöcke braucht man, um einen Eisengolem zu bauen? Mal 14.</p>
     <p><b>Z:</b> Wie viel Bruchstein braucht ein Ofen? Mal −20.</p>',
@@ -147,7 +153,7 @@ const TAGE = [
   15 => [
     'art'  => 'Morse-Funk',
     'x' => 200, 'y' => 71, 'z' => -39,
-    'tipp' => 'Unter einem Notenblock.',
+    'tipp' => '',
     'raetsel' => '<p>Ein Notenblock piept Morsezeichen:</p>
     <p><b>X:</b> <code>..--- ----- -----</code></p>
     <p><b>Y:</b> <code>--... .----</code></p>
@@ -156,7 +162,7 @@ const TAGE = [
   16 => [
     'art'  => 'Kopfrechnen',
     'x' => 180, 'y' => 65, 'z' => -280,
-    'tipp' => 'In einer kleinen Höhle.',
+    'tipp' => '',
     'raetsel' => '<p><b>X</b> = (12 × 12) + 36</p>
     <p><b>Y</b> = 1000 ÷ 8 − 60</p>
     <p><b>Z</b> = −(7 × 7 × 7 − 63)</p>',
@@ -164,7 +170,7 @@ const TAGE = [
   17 => [
     'art'  => 'Weihnachtswörter',
     'x' => 280, 'y' => 70, 'z' => -210,
-    'tipp' => 'Neben einem geschmückten Baum.',
+    'tipp' => '',
     'raetsel' => '<p>Zähle die Buchstaben.</p>
     <p><b>X:</b> WEIHNACHTSMANN, mal 20.</p>
     <p><b>Y:</b> TANNENBAUM, mal 7.</p>
@@ -173,7 +179,7 @@ const TAGE = [
   18 => [
     'art'  => 'Zeigerwinkel',
     'x' => 90, 'y' => 63, 'z' => -180,
-    'tipp' => 'Hinter einem Glockenturm.',
+    'tipp' => '',
     'raetsel' => '<p>Wie groß ist der Winkel zwischen den beiden Zeigern einer Uhr?</p>
     <p><b>X:</b> um 3:00 Uhr.</p>
     <p><b>Y:</b> um 2:00 Uhr, plus 3.</p>
@@ -182,7 +188,7 @@ const TAGE = [
   19 => [
     'art'  => 'Redstone-Lampen II',
     'x' => 222, 'y' => 66, 'z' => -111,
-    'tipp' => 'In einem Redstone-Raum.',
+    'tipp' => '',
     'raetsel' => '<p>Du kennst das schon: Leuchtend = 1, dunkel = 0 (128 … 1).</p>
     <p><b>X:</b> [[bin:222]]</p>
     <p><b>Y:</b> [[bin:66]]</p>
@@ -191,7 +197,7 @@ const TAGE = [
   20 => [
     'art'  => 'Kalenderrechnung',
     'x' => 300, 'y' => 72, 'z' => -260,
-    'tipp' => 'Auf einem Hügel unter Schnee.',
+    'tipp' => '',
     'raetsel' => '<p><b>X:</b> Die Jahreszahl 2026, halbiert, minus 713.</p>
     <p><b>Y:</b> Die Monate eines Jahres, mal 6.</p>
     <p><b>Z:</b> Die Wochen eines Jahres, mal −5.</p>',
@@ -199,7 +205,7 @@ const TAGE = [
   21 => [
     'art'  => 'Spiegelzahlen',
     'x' => 240, 'y' => 67, 'z' => -135,
-    'tipp' => 'Hinter einem Spiegel aus Glas.',
+    'tipp' => '',
     'raetsel' => '<p>Lies die Zahlen rückwärts.</p>
     <p><b>X:</b> 42 gespiegelt, mal 10.</p>
     <p><b>Y:</b> 76 gespiegelt.</p>
@@ -208,7 +214,7 @@ const TAGE = [
   22 => [
     'art'  => 'Redstone-Meister',
     'x' => 225, 'y' => 69, 'z' => -180,
-    'tipp' => 'Am Ende einer Redstone-Leitung.',
+    'tipp' => '',
     'raetsel' => '<p>Ein Redstone-Signal reicht 15 Blöcke weit.</p>
     <p><b>X:</b> 15 mal 15.</p>
     <p><b>Y:</b> Die volle Signalstärke mal 4, plus 9.</p>
@@ -217,7 +223,7 @@ const TAGE = [
   23 => [
     'art'  => 'Fast geschafft',
     'x' => 276, 'y' => 72, 'z' => -248,
-    'tipp' => 'Unter einer Glocke.',
+    'tipp' => '',
     'raetsel' => '<p><b>X:</b> Zähle alle Türchennummern von 1 bis 23 zusammen.</p>
     <p><b>Y:</b> Wie viele Türchen hat dieser Kalender? Mal 3.</p>
     <p><b>Z:</b> Wieder alle Türchen, mal 10, plus 8, aber negativ.</p>',
@@ -225,7 +231,7 @@ const TAGE = [
   24 => [
     'art'  => 'Die große Bescherung',
     'x' => 24, 'y' => 90, 'z' => -24,
-    'tipp' => 'Ihr habt es geschafft! Viel Spaß mit der Bescherung.',
+    'tipp' => '',
     'raetsel' => '<p>In jeder der 23 Kisten lag ein Puzzleteil.</p>
     <p>Legt alle Teile der Reihe nach zusammen: Erst mit dem letzten Teil kennt ihr die Koordinaten der <b>großen Weihnachtskiste</b>.</p>
     <p>Frohe Weihnachten! 🎄</p>',
@@ -404,7 +410,7 @@ if ($aktion === 'pruefen') {
     if (abs((int)$eingabe[$k] - $d[$k]) <= TOLERANZ) $treffer++;
   }
   if ($treffer === 3) {
-    antwort(['richtig' => true, 'x' => $d['x'], 'y' => $d['y'], 'z' => $d['z'], 'tipp' => $d['tipp']]);
+    antwort(['richtig' => true, 'x' => $d['x'], 'y' => $d['y'], 'z' => $d['z'], 'tipp' => $d['tipp'] !== '' ? $d['tipp'] : TIPP_STANDARD]);
   }
   antwort(['richtig' => false, 'treffer' => $treffer]);
 }
